@@ -6,7 +6,7 @@ import Button from '@mui/material/Button'
 import Tooltip from '@mui/material/Tooltip'
 import Typography from '@mui/material/Typography'
 import CardContent from '@mui/material/CardContent'
-
+import BasicSwitches from './switch'
 /**
  ** Icons Imports:
  * ! You need to import all the icons which come from the API or from your server and then add these icons in 'icons' variable.
@@ -27,6 +27,7 @@ const Controller = () => {
           </Link>
         </Typography>
         <Typography variant='body2'>Material Design Icons from the Community</Typography>
+        <BasicSwitches/>
       </Grid>
       <Grid item xs={12}>
         <Grid container spacing={6}>
