@@ -19,7 +19,7 @@ func (s server) SetupControllers() {
 	db := driver.ConnectSqlServerDB()
 
 	// init repository
-	userRepo := repository.NewUserRepo(db.DB)
+	userRepo := repository.NewUserRepo(db)
 
 	// init usecase
 	userUsecase := usecase.NewUserUsecase(userRepo)

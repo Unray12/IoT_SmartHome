@@ -10,19 +10,25 @@ type SqlServerDB struct {
 	DB *gorm.DB
 }
 
-var SqlServer = &SqlServerDB{}
+var SqlServer *SqlServerDB = nil
 
-func ConnectSqlServerDB() *SqlServerDB {
+func ConnectSqlServerDB() *gorm.DB {
+	if SqlServer == nil {
+		SqlServer = &SqlServerDB{}
+		//first-azure-sql.database.windows.net
+		//username: Tin
+		//password: ClashOfClan123
+		//the database is default
+		dsn := "sqlserver://Tin:ClashOfClan123@first-azure-sql.database.windows.net?database=Multidisciplinary-Project"
+		db, err := gorm.Open(sqlserver.Open(dsn), &gorm.Config{})
 
-	db, err := gorm.Open(sqlserver.Open("sqlserver connection string"), &gorm.Config{})
+		if err != nil {
+			panic(err)
+		}
 
-	if err != nil {
-		panic(err)
-
+		SqlServer.DB = db
 	}
-
-	SqlServer.DB = db
-	return SqlServer
+	return SqlServer.DB
 }
 
 // close function for the only instance of SqlServerDB

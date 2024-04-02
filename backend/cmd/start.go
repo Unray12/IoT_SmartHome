@@ -30,9 +30,9 @@ func (s server) Start() {
 	// graceful shutdown
 	quit := make(chan os.Signal, 1)
 	signal.Notify(quit, syscall.SIGINT, syscall.SIGTERM)
-	// close database connection
-	s.CloseSqlServerDB()
 	<-quit
+	//close database connection
+	s.CloseSqlServerDB()
 	log.Println("Shutdown Server ...")
 
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)

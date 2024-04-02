@@ -2,7 +2,9 @@ package repository
 
 import (
 	"context"
+	"fmt"
 	entity "go-jwt/internal/entity"
+	"strconv"
 
 	"gorm.io/gorm"
 )
@@ -35,13 +37,22 @@ func (userRepo *userRepository) CreateUser(ctx context.Context, user *entity.Use
 }
 
 func (userRepo *userRepository) GetUserByID(ctx context.Context, id string) (*entity.User, error) {
-	// user := entity.User{}
-	// err := userRepo.db.Where("id = ?", id).First(&user).Error
-	// if err != nil {
-	// 	return nil, err
-	// }
-	// return &user, nil
-	return nil, nil
+	user := entity.User{}
+
+	// convert string id to number ID
+	ID, er := strconv.Atoi(id)
+	if er != nil {
+		// handle error if the conversion fails
+		return nil, er
+	}
+
+	err := userRepo.db.Table("Users").Where("User_id = ?", ID).First(&user).Error
+
+	if err != nil {
+		fmt.Print("Error", err)
+		return nil, err
+	}
+	return &user, nil
 }
 
 func (userRepo *userRepository) GetUserByUsername(ctx context.Context, username string) (*entity.User, error) {
