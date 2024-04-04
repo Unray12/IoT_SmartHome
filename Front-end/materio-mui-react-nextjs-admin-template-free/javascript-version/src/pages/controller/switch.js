@@ -6,7 +6,7 @@ import Switch from '@mui/material/Switch';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import { Fan } from 'mdi-material-ui';
-
+import axios from 'axios';
 
 const label = { inputProps: { 'aria-label': 'Switch demo' } };
 
@@ -62,23 +62,34 @@ const IOSSwitch = styled((props) => (
 }));
 
 
+const BElink = "https://hgs-backend.onrender.com"
 export default function BasicSwitches() {
   const [fanChecked, setChecked] = React.useState(false);
   
-  const handleChange = () => {
-    setChecked(!fanChecked);
-    console.log("hello");
-    // sendDataToBackend();
+  const handleChangeFan = async (event) => {
+    setChecked(event.target.checked);
+
+    try {
+      const response = event.target.checked ? await axios.get(BElink + "/users/turnOnLight") : await axios.get(BElink + "/users/turnOffLight");
+      console.log(response);
+    } catch (error) {
+      console.log(error);
+    }
+    
   }
 
-  const sendDataToBackend = async () => {
+  const handleChangeLight = async (event) => {
+    setChecked(event.target.checked);
+
     try {
-      const response = await axios.post('http://example.com/api/data', data);
-      console.log('Data sent successfully:', response.data);
+      const response = event.target.checked ? await axios.get(BElink + "/users/turnOnLight") : await axios.get(BElink + "/users/turnOffLight");
+      console.log(response);
     } catch (error) {
-      console.error('Error sending data:', error);
+      console.log(error);
     }
+    
   }
+
   
   return (
     <div>
@@ -89,12 +100,15 @@ export default function BasicSwitches() {
             size="medium"
             color="warning"
             checked={fanChecked}
-            onChange={handleChange}
+            onChange={handleChangeFan}
           />} label="FAN" />
       </FormGroup>
 
       <FormControlLabel
-        control={<IOSSwitch sx={{ m: 1 }} defaultChecked />}
+        control={<IOSSwitch 
+          sx={{ m: 1 }} 
+          defaultChecked 
+          onChange={handleChangeLight}/>}
         label="LIGHT"
       />
     </div>
