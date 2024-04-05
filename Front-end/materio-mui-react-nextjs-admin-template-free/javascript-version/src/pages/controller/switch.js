@@ -7,6 +7,7 @@ import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import { Fan } from 'mdi-material-ui';
 import axios from 'axios';
+import Slider from '@mui/material/Slider';
 
 const label = { inputProps: { 'aria-label': 'Switch demo' } };
 
@@ -62,15 +63,56 @@ const IOSSwitch = styled((props) => (
 }));
 
 
+const PrettoSlider = styled(Slider)({
+  color: '#52af77',
+  height: 8,
+  '& .MuiSlider-track': {
+    border: 'none',
+  },
+  '& .MuiSlider-thumb': {
+    height: 24,
+    width: 24,
+    backgroundColor: '#fff',
+    border: '2px solid currentColor',
+    '&:focus, &:hover, &.Mui-active, &.Mui-focusVisible': {
+      boxShadow: 'inherit',
+    },
+    '&::before': {
+      display: 'none',
+    },
+  },
+  '& .MuiSlider-valueLabel': {
+    lineHeight: 1.2,
+    fontSize: 12,
+    background: 'unset',
+    padding: 0,
+    width: 32,
+    height: 32,
+    borderRadius: '50% 50% 50% 0',
+    backgroundColor: '#52af77',
+    transformOrigin: 'bottom left',
+    transform: 'translate(50%, -100%) rotate(-45deg) scale(0)',
+    '&::before': { display: 'none' },
+    '&.MuiSlider-valueLabelOpen': {
+      transform: 'translate(50%, -100%) rotate(-45deg) scale(1)',
+    },
+    '& > *': {
+      transform: 'rotate(45deg)',
+    },
+  },
+});
+
 const BElink = "https://hgs-backend.onrender.com"
 export default function BasicSwitches() {
-  const [fanChecked, setChecked] = React.useState(false);
+  const [fanChecked, setFanChecked] = React.useState(false);
+  const [fanLevel, setFanLevel] = React.useState(0);
+  const [lightChecked, setLightChecked] = React.useState(false);
   
   const handleChangeFan = async (event) => {
-    setChecked(event.target.checked);
+    setFanChecked(event.target.checked);
 
     try {
-      const response = event.target.checked ? await axios.get(BElink + "/users/turnOnLight") : await axios.get(BElink + "/users/turnOffLight");
+      const response = event.target.checked ? await axios.post(BElink + "/users/turnOnFan") : await axios.post(BElink + "/users/turnOffFan");
       console.log(response);
     } catch (error) {
       console.log(error);
@@ -78,11 +120,26 @@ export default function BasicSwitches() {
     
   }
 
+  const handleFanLevel = async (event) => {
+    setFanLevel(event.target.value);
+    try {
+      const response = await axios.post(BElink + "/users/updateFanSpeed", 
+      {
+        fan_speed:parseInt(event.target.value, 10), 
+        headers: {
+        "Content-Type": "application/json"
+      }})
+      console.log(response);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   const handleChangeLight = async (event) => {
-    setChecked(event.target.checked);
+    setLightChecked(event.target.checked);
 
     try {
-      const response = event.target.checked ? await axios.get(BElink + "/users/turnOnLight") : await axios.get(BElink + "/users/turnOffLight");
+      const response = event.target.checked ? await axios.post(BElink + "/users/turnOnLight") : await axios.post(BElink + "/users/turnOffLight");
       console.log(response);
     } catch (error) {
       console.log(error);
@@ -99,18 +156,47 @@ export default function BasicSwitches() {
             defaultChecked 
             size="medium"
             color="warning"
+            sx={{
+              transform: 'scale(1.5)', // Adjust the scale as per your requirement
+            }}
             checked={fanChecked}
             onChange={handleChangeFan}
-          />} label="FAN" />
-      </FormGroup>
+          />} 
+          labelPlacement='top'
+          label="FAN" />
+      {/* </FormGroup> */}
 
+        <FormControlLabel
+          control={<IOSSwitch 
+            sx={{ 
+              m: 1,
+              transform: 'scale(1.5)',
+            }} 
+            defaultChecked
+            checked={lightChecked} 
+            onChange={handleChangeLight}/>}
+            labelPlacement='top'
+            label="LIGHT"
+        />
+
+    </FormGroup>
+    
+    <FormGroup>
       <FormControlLabel
-        control={<IOSSwitch 
-          sx={{ m: 1 }} 
-          defaultChecked 
-          onChange={handleChangeLight}/>}
-        label="LIGHT"
+        control={<PrettoSlider
+          valueLabelDisplay="auto"
+          value={fanLevel}
+          onChange={handleFanLevel}
+          aria-label="pretto slider"
+          defaultValue={20} 
+          sx={{
+            width: '30%', // Adjust the width as per your requirement
+          }}
+        />}
+        labelPlacement='top'
+        label="FAN SLIDER"
       />
+      </FormGroup>
     </div>
   );
 }
