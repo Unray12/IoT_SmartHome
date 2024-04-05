@@ -8,8 +8,15 @@ import Typography from '@mui/material/Typography';
 import { Fan } from 'mdi-material-ui';
 import axios from 'axios';
 import Slider from '@mui/material/Slider';
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
+
+
 
 const label = { inputProps: { 'aria-label': 'Switch demo' } };
+
+
+
 
 const IOSSwitch = styled((props) => (
   <Switch focusVisibleClassName=".Mui-focusVisible" disableRipple {...props} />
@@ -103,14 +110,14 @@ const PrettoSlider = styled(Slider)({
 });
 
 const BElink = "https://hgs-backend.onrender.com"
-export default function BasicSwitches() {
+export default function BasicSwitches(props) {
+  const { text } = props
   const [fanChecked, setFanChecked] = React.useState(false);
   const [fanLevel, setFanLevel] = React.useState(0);
   const [lightChecked, setLightChecked] = React.useState(false);
   
   const handleChangeFan = async (event) => {
     setFanChecked(event.target.checked);
-
     try {
       const response = event.target.checked ? await axios.post(BElink + "/users/turnOnFan") : await axios.post(BElink + "/users/turnOffFan");
       console.log(response);
@@ -147,11 +154,17 @@ export default function BasicSwitches() {
     
   }
 
+  const handleOnChange = (event) => {
+    if (text == "LIGHT")
+      handleChangeLight(event);
+    else if (text == "FAN")
+      handleChangeFan(event);
+  }
   
   return (
     <div>
       <FormGroup>
-        <FormControlLabel control={
+        {/* <FormControlLabel control={
           <Switch 
             defaultChecked 
             size="medium"
@@ -163,24 +176,24 @@ export default function BasicSwitches() {
             onChange={handleChangeFan}
           />} 
           labelPlacement='top'
-          label="FAN" />
+          label="FAN" /> */}
       {/* </FormGroup> */}
 
         <FormControlLabel
           control={<IOSSwitch 
             sx={{ 
               m: 1,
-              transform: 'scale(1.5)',
+              transform: 'scale(1)',
             }} 
             defaultChecked
-            checked={lightChecked} 
-            onChange={handleChangeLight}/>}
+            checked={text == "LIGHT" ? lightChecked : fanChecked} 
+            onChange={handleOnChange}/>}
             labelPlacement='top'
-            label="LIGHT"
+            label=""
         />
 
     </FormGroup>
-    
+    {text == "FAN" &&
     <FormGroup>
       <FormControlLabel
         control={<PrettoSlider
@@ -190,13 +203,16 @@ export default function BasicSwitches() {
           aria-label="pretto slider"
           defaultValue={20} 
           sx={{
-            width: '30%', // Adjust the width as per your requirement
+            width: '100%', // Adjust the width as per your requirement
           }}
         />}
         labelPlacement='top'
         label="FAN SLIDER"
       />
-      </FormGroup>
+      </FormGroup>}
+
+
+
     </div>
   );
 }
