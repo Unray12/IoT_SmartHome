@@ -16,28 +16,25 @@ const data = [
   {
     progress: 75,
     imgHeight: 20,
-    title: 'Zipcar',
+    title: 'AC',
     color: 'primary',
-    amount: '$24,895.65',
-    subtitle: 'Vuejs, React & HTML',
+    amount: '24,895.65',
     imgSrc: '/images/cards/logo-zipcar.png'
   },
   {
     progress: 50,
     color: 'info',
     imgHeight: 27,
-    title: 'Bitbank',
-    amount: '$8,650.20',
-    subtitle: 'Sketch, Figma & XD',
+    title: 'Light',
+    amount: '8,650.20',
     imgSrc: '/images/cards/logo-bitbank.png'
   },
   {
     progress: 20,
     imgHeight: 20,
-    title: 'Aviato',
+    title: 'Fan',
     color: 'secondary',
-    amount: '$1,245.80',
-    subtitle: 'HTML & Angular',
+    amount: '1,245.80',
     imgSrc: '/images/cards/logo-aviato.png'
   }
 ]
@@ -57,7 +54,7 @@ const TotalEarning = () => {
       <CardContent sx={{ pt: theme => `${theme.spacing(0)} !important` }}>
         <Box sx={{ mb: 1.5, display: 'flex', alignItems: 'center' }}>
           <Typography variant='h4' sx={{ fontWeight: 600, fontSize: '2.125rem !important' }}>
-            $24,895
+            24,895
           </Typography>
           <Box sx={{ display: 'flex', alignItems: 'center', color: 'success.main' }}>
             <MenuUp sx={{ fontSize: '1.875rem', verticalAlign: 'middle' }} />
