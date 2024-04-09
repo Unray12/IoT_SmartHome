@@ -8,6 +8,50 @@ import Typography from '@mui/material/Typography';
 import BasicSwitches from './switch';
 import Grid from '@mui/material/Grid';
 import SpeedDialIcon from '@mui/material/SpeedDialIcon';
+import FormGroup from '@mui/material/FormGroup';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import { styled } from '@mui/material/styles';
+import Slider from '@mui/material/Slider';
+
+
+const PrettoSlider = styled(Slider)({
+  color: '#52af77',
+  height: 8,
+  '& .MuiSlider-track': {
+    border: 'none',
+  },
+  '& .MuiSlider-thumb': {
+    height: 24,
+    width: 24,
+    backgroundColor: '#fff',
+    border: '2px solid currentColor',
+    '&:focus, &:hover, &.Mui-active, &.Mui-focusVisible': {
+      boxShadow: 'inherit',
+    },
+    '&::before': {
+      display: 'none',
+    },
+  },
+  '& .MuiSlider-valueLabel': {
+    lineHeight: 1.2,
+    fontSize: 12,
+    background: 'unset',
+    padding: 0,
+    width: 32,
+    height: 32,
+    borderRadius: '50% 50% 50% 0',
+    backgroundColor: '#52af77',
+    transformOrigin: 'bottom left',
+    transform: 'translate(50%, -100%) rotate(-45deg) scale(0)',
+    '&::before': { display: 'none' },
+    '&.MuiSlider-valueLabelOpen': {
+      transform: 'translate(50%, -100%) rotate(-45deg) scale(1)',
+    },
+    '& > *': {
+      transform: 'rotate(45deg)',
+    },
+  },
+});
 
 const bull = (
   <Box
@@ -19,9 +63,47 @@ const bull = (
 );
 
 export default function BasicCard(props) {
+  const handleFanLevel = async (event) => {
+    setFanLevel(event.target.value);
+    try {
+      const response = await axios.post(BElink + "/users/updateFanSpeed", 
+      {
+        fan_speed:parseInt(event.target.value, 10), 
+        headers: {
+        "Content-Type": "application/json"
+      }})
+      console.log(response);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+  // const handleFanLevel = async (event) => {
+  //   setFanLevel(event.target.value);
+  //   if (handleFanLevel.timeoutId) {
+  //     clearTimeout(handleFanLevel.timeoutId);
+  //   }
+  //   handleFanLevel.timeoutId = setTimeout(async () => {
+  //     try {
+  //       const response = await axios.post(BElink + "/users/updateFanSpeed", {
+  //         fan_speed: parseInt(event.target.value, 10),
+  //       }, {
+  //         headers: {
+  //           "Content-Type": "application/json"
+  //         }
+  //       });
+  //       console.log(response);
+  //     } catch (error) {
+  //       console.log(error);
+  //     }
+  //   }, 1000); // 1000 milliseconds = 1 second
+  // };
+  
+
+  const [fanLevel, setFanLevel] = React.useState(0);
     const { text } = props
+
   return (
-    <Card sx={{ width: "50%", minWidth: 400 }}>
+    <Card sx={{ width: "50%", minWidth: 400, minHeight: 150 }}>
       <CardContent>
         <Grid container justifyContent="space-between" alignItems="center">
             <Grid item>
@@ -37,13 +119,30 @@ export default function BasicCard(props) {
                 Active 3 hours ago
             </Grid>
         {{text} == "FAN" }
+        {text == "FAN" &&
+    <FormGroup>
+      <FormControlLabel
+        control={<PrettoSlider
+          valueLabelDisplay="auto"
+          value={fanLevel}
+          onChange={handleFanLevel}
+          aria-label="pretto slider"
+          defaultValue={20} 
+          sx={{
+            width: '100%', // Adjust the width as per your requirement
+          }}
+        />}
+        labelPlacement='top'
+        label="FAN SLIDER"
+      />
+      </FormGroup>}
          </Grid>
 
 
       </CardContent>
-      <CardActions>
+      {/* <CardActions>
         <Button size="small">Learn More</Button>
-      </CardActions>
+      </CardActions> */}
     </Card>
   );
 }
