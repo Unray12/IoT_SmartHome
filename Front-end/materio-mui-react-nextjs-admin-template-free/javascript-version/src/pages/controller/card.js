@@ -8,8 +8,6 @@ import Typography from '@mui/material/Typography';
 import BasicSwitches from './switch';
 import Grid from '@mui/material/Grid';
 import SpeedDialIcon from '@mui/material/SpeedDialIcon';
-<<<<<<< HEAD
-=======
 import FormGroup from '@mui/material/FormGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import { styled } from '@mui/material/styles';
@@ -54,7 +52,6 @@ const PrettoSlider = styled(Slider)({
     },
   },
 });
->>>>>>> 68d1ce5286ea0652ca7c3998b86662ba58e654ff
 
 const bull = (
   <Box
@@ -66,11 +63,6 @@ const bull = (
 );
 
 export default function BasicCard(props) {
-<<<<<<< HEAD
-    const { text } = props
-  return (
-    <Card sx={{ width: "50%", minWidth: 400 }}>
-=======
   const handleFanLevel = async (event) => {
     setFanLevel(event.target.value);
     try {
@@ -111,8 +103,9 @@ export default function BasicCard(props) {
     const { text } = props
 
   return (
-    <Card sx={{ width: "50%", minWidth: 400, minHeight: 150 }}>
->>>>>>> 68d1ce5286ea0652ca7c3998b86662ba58e654ff
+    <Card 
+    sx={{ width: "50%", minWidth: 400, minHeight: 150}}>
+
       <CardContent>
         <Grid container justifyContent="space-between" alignItems="center">
             <Grid item>
@@ -128,14 +121,13 @@ export default function BasicCard(props) {
                 Active 3 hours ago
             </Grid>
         {{text} == "FAN" }
-<<<<<<< HEAD
-=======
         {text == "FAN" &&
     <FormGroup>
       <FormControlLabel
         control={<PrettoSlider
           valueLabelDisplay="auto"
           value={fanLevel}
+          onChangeCommitted={handleFanLevel}
           onChange={handleFanLevel}
           aria-label="pretto slider"
           defaultValue={20} 
@@ -147,20 +139,13 @@ export default function BasicCard(props) {
         label="FAN SLIDER"
       />
       </FormGroup>}
->>>>>>> 68d1ce5286ea0652ca7c3998b86662ba58e654ff
          </Grid>
 
 
       </CardContent>
-<<<<<<< HEAD
-      <CardActions>
-        <Button size="small">Learn More</Button>
-      </CardActions>
-=======
       {/* <CardActions>
         <Button size="small">Learn More</Button>
       </CardActions> */}
->>>>>>> 68d1ce5286ea0652ca7c3998b86662ba58e654ff
     </Card>
   );
 }
