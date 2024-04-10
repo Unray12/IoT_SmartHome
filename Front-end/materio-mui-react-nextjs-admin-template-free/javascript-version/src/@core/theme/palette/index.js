@@ -1,7 +1,7 @@
 const DefaultPalette = (mode, themeColor) => {
   // ** Vars
-  const lightColor = '58, 53, 65'
-  const darkColor = '231, 227, 252'
+  const lightColor = 'rgb(58, 53, 65)'
+  const darkColor = 'rgb(231, 227, 252)'
   const mainColor = mode === 'light' ? lightColor : darkColor
 
   const primaryGradient = () => {
