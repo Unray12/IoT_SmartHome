@@ -1,7 +1,6 @@
 package repository
 
 import (
-	"context"
 	"fmt"
 	entity "go-jwt/internal/entity"
 
@@ -9,12 +8,10 @@ import (
 )
 
 type UserRepository interface {
-	CreateUser(ctx context.Context, user *entity.User) (*entity.User, error)
 	GetUserByID(id int) (*entity.User, error)
 	GetUserByUsername(username string) (*entity.User, error)
-	UpdateUser(ctx context.Context, id string, data *entity.User) (*entity.User, error)
-	DeleteUser(ctx context.Context, id string) error
 	GetTempAndHumid(house_id int) (float64, float64, error)
+	GetHouseID(userID int) ([]int, error)
 }
 
 type userRepository struct {
@@ -25,15 +22,6 @@ func NewUserRepo(db *gorm.DB) UserRepository {
 	return &userRepository{
 		db: db,
 	}
-}
-
-func (userRepo *userRepository) CreateUser(ctx context.Context, user *entity.User) (*entity.User, error) {
-	// err := userRepo.db.Create(user).Error
-	// if err != nil {
-	// 	return nil, err
-	// }
-	// return user, nil
-	return nil, nil
 }
 
 func (userRepo *userRepository) GetUserByID(id int) (*entity.User, error) {
@@ -61,24 +49,6 @@ func (userRepo *userRepository) GetUserByUsername(username string) (*entity.User
 	return &user, nil
 }
 
-func (userRepo *userRepository) UpdateUser(ctx context.Context, id string, data *entity.User) (*entity.User, error) {
-	// err := userRepo.db.Model(&entity.User{}).Where("id = ?", id).Updates(data).Error
-	// if err != nil {
-	// 	return nil, err
-	// }
-	// return data, nil
-	return nil, nil
-}
-
-func (userRepo *userRepository) DeleteUser(ctx context.Context, id string) error {
-	// err := userRepo.db.Where("id = ?", id).Delete(&entity.User{}).Error
-	// if err != nil {
-	// 	return err
-	// }
-	// return nil
-	return nil
-}
-
 func (userRepo *userRepository) GetTempAndHumid(house_id int) (float64, float64, error) {
 	var temp float64
 	var humid float64
@@ -91,4 +61,31 @@ func (userRepo *userRepository) GetTempAndHumid(house_id int) (float64, float64,
 		return 0, 0, err
 	}
 	return temp, humid, nil
+}
+
+//	type User struct {
+//		ID       int    `gorm:"primaryKey;column:User_id" json:"user_id"`
+//		Username string `gorm:"username" json:"username"`
+//		Password string `gorm:"password" json:"password"`
+//	}
+//
+// type Own struct { // More descriptive name
+//
+//		UserID  int `gorm:"primary_key;foreignKey:User_id"`
+//		HouseID int `gorm:"primary_key;foreignKey:House_id"`
+//	}
+//
+//	type House struct {
+//		ID       int    `gorm:"primaryKey;column:House_id" json:"house_id"`
+//		Name     string `gorm:"name" json:"name"`
+//		Password string `gorm:"password" json:"password"`
+//	}
+
+func (userRepo *userRepository) GetHouseID(userID int) ([]int, error) {
+	var houseIDs []int
+	err := userRepo.db.Table("Own").Where("User_id = ?", userID).Select("House_id").Scan(&houseIDs).Error
+	if err != nil {
+		return nil, err
+	}
+	return houseIDs, nil
 }
