@@ -20,6 +20,8 @@ type UserUsecase interface {
 	// DeleteUser(ctx context.Context, id string) error
 	AuthenticateUser(username string, password string) (*entity.User, string, []int, error)
 	GetTempAndHumid(house_id int) (float64, float64, error)
+	GetHouseSettingByHouseID(house_id int) ([]entity.HouseSetting, error)
+	GetSetOfHouseSetting(house_id int, settingName string) ([]entity.Set, error)
 }
 
 type userUsecase struct {
@@ -74,5 +76,17 @@ func (s *userUsecase) AuthenticateUser(username string, password string) (*entit
 
 	house_ids, err := s.userRepo.GetHouseID(user.ID)
 
+	if err != nil {
+		return nil, "", nil, err
+	}
+
 	return user, token, house_ids, nil
+}
+
+func (s *userUsecase) GetHouseSettingByHouseID(house_id int) ([]entity.HouseSetting, error) {
+	return s.userRepo.GetHouseSettingByHouseID(house_id)
+}
+
+func (s *userUsecase) GetSetOfHouseSetting(house_id int, settingName string) ([]entity.Set, error) {
+	return s.userRepo.GetSetOfHouseSetting(house_id, settingName)
 }

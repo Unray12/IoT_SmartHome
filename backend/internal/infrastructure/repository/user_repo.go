@@ -12,6 +12,8 @@ type UserRepository interface {
 	GetUserByUsername(username string) (*entity.User, error)
 	GetTempAndHumid(house_id int) (float64, float64, error)
 	GetHouseID(userID int) ([]int, error)
+	GetHouseSettingByHouseID(house_id int) ([]entity.HouseSetting, error)
+	GetSetOfHouseSetting(house_id int, settingName string) ([]entity.Set, error)
 }
 
 type userRepository struct {
@@ -88,4 +90,37 @@ func (userRepo *userRepository) GetHouseID(userID int) ([]int, error) {
 		return nil, err
 	}
 	return houseIDs, nil
+}
+
+// type HouseSetting struct {
+// 	// combination of Name and House_id is primary key
+// 	Name string `gorm:"primaryKey;column:Name" json:"name"`
+// 	House_id int `gorm:"primaryKey;foreignKey:House_id" json:"house_id"`
+// 	Selected bool `gorm:"selected" json:"selected"`
+//   }
+
+//   type Set struct {
+// 	Device_id int `gorm:"primaryKey;foreignKey:Device_id" json:"device_id"`
+// 	House_id int `gorm:"primaryKey;foreignKey:House_id" json:"house_id"`
+// 	Name string `gorm:"primaryKey;foreignKey:Name" json:"name"`
+// 	Device_data int `gorm:"Device_data" json:"device_data"`
+// 	Device_state string `gorm:"Device_state" json:"device_state"`
+//   }
+
+func (userRepo *userRepository) GetHouseSettingByHouseID(house_id int) ([]entity.HouseSetting, error) {
+	var houseSettings []entity.HouseSetting
+	err := userRepo.db.Table("House_setting").Where("House_id = ?", house_id).Find(&houseSettings).Error
+	if err != nil {
+		return nil, err
+	}
+	return houseSettings, nil
+}
+
+func (userRepo *userRepository) GetSetOfHouseSetting(house_id int, settingName string) ([]entity.Set, error) {
+	var sets []entity.Set
+	err := userRepo.db.Table("Set").Where("House_id = ? and Name = ?", house_id, settingName).Find(&sets).Error
+	if err != nil {
+		return nil, err
+	}
+	return sets, nil
 }

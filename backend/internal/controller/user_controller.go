@@ -42,6 +42,8 @@ func SetupUserRoutes(router *gin.Engine, userService usecase.UserUsecase) {
 		userRoutes.POST("/turnOffFan", userController.turnOffFan)
 		userRoutes.POST("/updateFanSpeed", userController.updateFanSpeed)
 		userRoutes.GET("/getTempAndHumid", userController.getTempAndHumid)
+		userRoutes.GET("/getHouseSetting", userController.getHouseSettingByHouseID)
+		userRoutes.GET("/getSetOfHouseSetting", userController.getSetOfHouseSetting)
 	}
 }
 
@@ -403,4 +405,35 @@ func (h UserController) turnOffFan(ctx *gin.Context) {
 
 	// Print the response body
 	fmt.Println("Response body:", string(bodyResponse))
+}
+
+func (h UserController) getHouseSettingByHouseID(ctx *gin.Context) {
+	request := h.NewUserRequest()
+	house_id := request.GetHouseIDFromURL(ctx)
+
+	houseSetting, err := h.userService.GetHouseSettingByHouseID(house_id)
+
+	if err != nil {
+		fmt.Println("get house setting failed:", err.Error())
+		ctx.JSON(http.StatusBadRequest, gin.H{"message": "get house setting failed", "error": err.Error()})
+		return
+	}
+
+	ctx.JSON(http.StatusOK, houseSetting)
+}
+
+func (h UserController) getSetOfHouseSetting(ctx *gin.Context) {
+	request := h.NewUserRequest()
+	house_id := request.GetHouseIDFromURL(ctx)
+	settingName := request.GetHouseSettingNameFromURL(ctx)
+
+	set, err := h.userService.GetSetOfHouseSetting(house_id, settingName)
+
+	if err != nil {
+		fmt.Println("get set of house setting failed:", err.Error())
+		ctx.JSON(http.StatusBadRequest, gin.H{"message": "get set of house setting failed", "error": err.Error()})
+		return
+	}
+
+	ctx.JSON(http.StatusOK, set)
 }

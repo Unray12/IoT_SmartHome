@@ -2,6 +2,7 @@ package request
 
 import (
 	"go-jwt/internal/entity"
+	"strconv"
 	"strings"
 
 	"github.com/gin-gonic/gin"
@@ -16,6 +17,8 @@ type UserRequest interface {
 	GetIDFromURL(c *gin.Context) string
 	GetUsername() string
 	GetPassword() string
+	GetHouseIDFromURL(ctx *gin.Context) int
+	GetHouseSettingNameFromURL(ctx *gin.Context) string
 }
 
 type userRequest struct {
@@ -66,4 +69,15 @@ func (r *userRequest) GetPassword() string {
 	password = strings.ReplaceAll(password, "--", "\\--")
 
 	return password
+}
+
+// /users/getHouseSettingByHouseID?house_id=1
+func (r *userRequest) GetHouseIDFromURL(ctx *gin.Context) int {
+	houseID, _ := ctx.GetQuery("house_id")
+	house_id, _ := strconv.Atoi(houseID)
+	return house_id
+}
+
+func (r *userRequest) GetHouseSettingNameFromURL(ctx *gin.Context) string {
+	return ctx.Query("name")
 }
