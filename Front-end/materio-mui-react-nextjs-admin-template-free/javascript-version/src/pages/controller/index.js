@@ -9,7 +9,7 @@ import CardContent from '@mui/material/CardContent'
 import BasicSwitches from './switch'
 import controllerCard from './card'
 import BasicCard from './card'
-
+import PresetMenu from './presetMenu'
 
 
 /**
@@ -35,6 +35,9 @@ const Controller = () => {
           </Link>
         </Typography>
       </Grid>
+      <Grid item>
+        <PresetMenu/>
+      </Grid>
       {devices.map(device => (
         <Grid 
           item key={device} 
@@ -44,6 +47,7 @@ const Controller = () => {
           <BasicCard text={device} />
         </Grid>
       ))}
+
     </Grid>
   )
 }
