@@ -1,23 +1,14 @@
 import * as React from 'react';
 import PropTypes from 'prop-types';
 import Button from '@mui/material/Button';
-import Avatar from '@mui/material/Avatar';
-import List from '@mui/material/List';
-import ListItem from '@mui/material/ListItem';
-import ListItemAvatar from '@mui/material/ListItemAvatar';
-import ListItemButton from '@mui/material/ListItemButton';
-import ListItemText from '@mui/material/ListItemText';
 import DialogTitle from '@mui/material/DialogTitle';
 import Dialog from '@mui/material/Dialog';
-import PersonIcon from '@mui/icons-material/Person';
-import AddIcon from '@mui/icons-material/Add';
-import Typography from '@mui/material/Typography';
-import { blue } from '@mui/material/colors';
 import Switch from '@mui/material/Switch';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import FormGroup from '@mui/material/FormGroup';
 import Stack from '@mui/material/Stack';
 import { DialogContent } from '@mui/material';
+import Slider from '@mui/material/Slider';
 
 const emails = ['username@gmail.com', 'user02@gmail.com'];
 
@@ -37,12 +28,13 @@ function SimpleDialog(props) {
       <DialogTitle>Presetting devices</DialogTitle>
       <DialogContent sx={{ padding: '20px' }} >
         <FormGroup>
-            <FormControlLabel control={<Switch defaultChecked />} label="FAN" />
+            <FormControlLabel control={<Switch defaultChecked />} label="FAN"  />
+            <Slider defaultValue={50} aria-label="Default" valueLabelDisplay="auto" />
             <FormControlLabel control={<Switch defaultChecked />} label="LIGHT" />
-            <FormControlLabel control={<Switch defaultChecked />} label="AIR-CONDITIONER" />
+            <FormControlLabel control={<Switch defaultChecked />} label="AIR-CONDITIONER"/>
         </FormGroup>
         <Stack sx={{ margin: '20px' }}>
-            <Button variant="contained">Contained</Button>
+            <Button variant="contained">Save</Button>
         </Stack>
     </DialogContent>
     </Dialog>
