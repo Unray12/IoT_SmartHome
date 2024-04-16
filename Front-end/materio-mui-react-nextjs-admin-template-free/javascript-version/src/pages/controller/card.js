@@ -80,7 +80,7 @@ export default function BasicCard(props) {
             <Grid item sx={{ fontSize: 14, width: 'fit-content'}} color="text.secondary" gutterBottom>
                 Active 3 hours ago
             </Grid>
-        {{text} == "FAN" }
+        {/* {{text} == "FAN" } */}
         </Grid>
 
 

@@ -45,10 +45,9 @@ useEffect(() => {
             </svg>
             &nbsp;Device Controller
           </Link>
+          <PresetMenu/>
         </Typography>
-      </Grid>
-      <Grid item>
-        <PresetMenu/>
+        
       </Grid>
       {devices.map(device => (
         <Grid

@@ -179,9 +179,9 @@ export default function BasicSwitches(props) {
             label=""
         />
 
-      </FormGroup>
+      {/* </FormGroup> */}
     {text == "FAN" &&
-    <FormGroup>
+    // <FormGroup>
       <FormControlLabel
         control={<PrettoSlider
           valueLabelDisplay="auto"
@@ -197,8 +197,9 @@ export default function BasicSwitches(props) {
         labelPlacement='top'
         label="FAN SLIDER"
       />
-      </FormGroup>}
-
+      // </FormGroup>
+      }
+    </FormGroup>
 
 
     </div>

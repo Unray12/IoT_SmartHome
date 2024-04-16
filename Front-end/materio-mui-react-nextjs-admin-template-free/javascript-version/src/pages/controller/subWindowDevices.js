@@ -12,7 +12,7 @@ import Slider from '@mui/material/Slider';
 
 const emails = ['username@gmail.com', 'user02@gmail.com'];
 
-function SimpleDialog(props) {
+export default function SimpleDialog(props) {
   const { onClose, selectedValue, open } = props;
 
   const handleClose = () => {
@@ -47,29 +47,30 @@ SimpleDialog.propTypes = {
   selectedValue: PropTypes.string.isRequired,
 };
 
-export default function SimpleDialogDemo() {
-  const [open, setOpen] = React.useState(false);
-  const [selectedValue, setSelectedValue] = React.useState(emails[1]);
 
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
+// export default function SimpleDialogDemo() {
+//   const [open, setOpen] = React.useState(false);
+//   const [selectedValue, setSelectedValue] = React.useState(emails[1]);
 
-  const handleClose = (value) => {
-    setOpen(false);
-    setSelectedValue(value);
-  };
+//   const handleClickOpen = () => {
+//     setOpen(true);
+//   };
 
-  return (
-    <div>
-      <Button variant="outlined" onClick={handleClickOpen}>
-        Open simple dialog
-      </Button>
-      <SimpleDialog
-        selectedValue={selectedValue}
-        open={open}
-        onClose={handleClose}
-      />
-    </div>
-  );
-}
+//   const handleClose = (value) => {
+//     setOpen(false);
+//     setSelectedValue(value);
+//   };
+
+//   return (
+//     <div>
+//       <Button variant="outlined" onClick={handleClickOpen}>
+//         Open simple dialog
+//       </Button>
+//       <SimpleDialog
+//         selectedValue={selectedValue}
+//         open={open}
+//         onClose={handleClose}
+//       />
+//     </div>
+//   );
+// }
