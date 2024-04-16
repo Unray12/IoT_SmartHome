@@ -115,22 +115,27 @@ export default function BasicSwitches(props) {
   const handleChangeFan = async (event) => {
     setFanChecked(event.target.checked);
     try {
-      const response = event.target.checked ? await axios.post(BElink + "/users/turnOnFan") : await axios.post(BElink + "/users/turnOffFan");
+      const response = event.target.checked ? await axios.post(BElink + "/users/turnOnFan", { headers: { Authorization:localStorage.getItem('SavedToken') }}) 
+      : await axios.post(BElink + "/users/turnOffFan", { headers: { Authorization:localStorage.getItem('SavedToken') }});
       console.log(response);
     } catch (error) {
       console.log(error);
     }
     
   }
+  const handleChangeFanLevel = (event, newValue) => {
+    setFanLevel(newValue);
+  };
 
-  const handleFanLevel = async (event) => {
-    setFanLevel(event.target.value);
+  const handleFanLevel = async (event, newValue) => {
+    setFanLevel(newValue);
     try {
       const response = await axios.post(BElink + "/users/updateFanSpeed", 
       {
-        fan_speed:parseInt(event.target.value, 10), 
+        fan_speed:parseInt(newValue, 10), 
         headers: {
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
+        Authorization:localStorage.getItem('SavedToken')
       }})
       console.log(response);
     } catch (error) {
@@ -142,7 +147,8 @@ export default function BasicSwitches(props) {
     setLightChecked(event.target.checked);
 
     try {
-      const response = event.target.checked ? await axios.post(BElink + "/users/turnOnLight") : await axios.post(BElink + "/users/turnOffLight");
+      const response = event.target.checked ? await axios.post(BElink + "/users/turnOnLight", { headers: { Authorization:localStorage.getItem('SavedToken') }}) 
+      : await axios.post(BElink + "/users/turnOffLight",{ headers: { Authorization:localStorage.getItem('SavedToken') }});
       console.log(response);
     } catch (error) {
       console.log(error);
@@ -160,21 +166,6 @@ export default function BasicSwitches(props) {
   return (
     <div>
       <FormGroup>
-        {/* <FormControlLabel control={
-          <Switch 
-            defaultChecked 
-            size="medium"
-            color="warning"
-            sx={{
-              transform: 'scale(1.5)', // Adjust the scale as per your requirement
-            }}
-            checked={fanChecked}
-            onChange={handleChangeFan}
-          />} 
-          labelPlacement='top'
-          label="FAN" /> */}
-      {/* </FormGroup> */}
-
         <FormControlLabel
           control={<IOSSwitch 
             sx={{ 
@@ -188,14 +179,15 @@ export default function BasicSwitches(props) {
             label=""
         />
 
-    </FormGroup>
-    {/* {text == "FAN" &&
+      </FormGroup>
+    {text == "FAN" &&
     <FormGroup>
       <FormControlLabel
         control={<PrettoSlider
           valueLabelDisplay="auto"
           value={fanLevel}
-          onChange={handleFanLevel}
+          onChange={handleChangeFanLevel}
+          onChangeCommitted={handleFanLevel}
           aria-label="pretto slider"
           defaultValue={20} 
           sx={{
@@ -205,7 +197,7 @@ export default function BasicSwitches(props) {
         labelPlacement='top'
         label="FAN SLIDER"
       />
-      </FormGroup>} */}
+      </FormGroup>}
 
 
 

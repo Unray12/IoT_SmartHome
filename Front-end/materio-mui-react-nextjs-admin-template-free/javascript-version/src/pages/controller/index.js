@@ -19,10 +19,10 @@ import axios from 'axios'
  * ! If you need all the icons from the library, use "import * as Icon from 'mdi-material-ui'"
  * */
 
- const BElink = "https://hgs-backend.onrender.com"
+const BElink = "https://hgs-backend.onrender.com"
 
 const Controller = () => {
-  const devices = ["LIGHT", "FAN", "AIR-CONDITIONER", "SMART TV"]
+const devices = ["LIGHT", "FAN", "AIR-CONDITIONER", "SMART TV"]
 
 const getAllHouseSetting = async () => {
     console.log(localStorage.getItem("SavedToken"))
