@@ -41,19 +41,24 @@ export default function PresetMenu() {
           headers: {
           "Content-Type": "application/json",
           Authorization:localStorage.getItem('SavedToken')
-        }})
+        }});
+        console.log(response);
       } else if (preset[i].device_id == 18) {
         const response = preset[i].device_status == "true" ? await axios.post(BElink + "/users/turnOnLight", { headers: { Authorization:localStorage.getItem('SavedToken') }}) 
         : await axios.post(BElink + "/users/turnOffLight",{ headers: { Authorization:localStorage.getItem('SavedToken') }});
+        console.log(response);
       }
     }
   }
-
-  const handleClose = async () => {
+  const handleCloseMenu = (value) => {
     setAnchorEl(null);
+  }
+  const handleClose = async () => {
+    
     handleClickOpenDialog();
     let response = await axios.get(BElink + `/users/getHouseSetting?house_id=1&${selectedPreset.name}}`, { headers: { Authorization:localStorage.getItem('SavedToken') }});
     applyPreset(response.data);
+    console.log(response)
   };
 
   const addMorePreset = () => {
@@ -79,7 +84,7 @@ export default function PresetMenu() {
         id="basic-menu"
         anchorEl={anchorEl}
         open={open}
-        onClose={handleClose}
+        onClose={handleCloseMenu}
         MenuListProps={{
           'aria-labelledby': 'basic-button',
         }}
