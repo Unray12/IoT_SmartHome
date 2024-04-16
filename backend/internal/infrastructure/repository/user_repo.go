@@ -3,7 +3,6 @@ package repository
 import (
 	"fmt"
 	entity "go-jwt/internal/entity"
-	"time"
 
 	"gorm.io/gorm"
 )
@@ -174,17 +173,6 @@ func (userRepo *userRepository) UpdateDeviceData(deviceID int, data float64, hou
 	if err != nil {
 		return err
 	}
-	// Create new Data Record
-	err = userRepo.db.Table("Data_record").Create(
-		&entity.DataRecord{
-			Device_id:    deviceID,
-			Time:         time.Now(),
-			Device_data:  data,
-			Device_state: true,
-		}).Error
-	if err != nil {
-		return err
-	}
 
 	return nil
 }
@@ -194,22 +182,6 @@ func (userRepo *userRepository) UpdataDeviceState(deviceID int, state bool, hous
 	if err != nil {
 		return err
 	}
-	// get the device data
-	var data float64
-	err = userRepo.db.Table("Set").Where("House_id = ? and Name = ? and Device_id = ?", house_id, setting, deviceID).Select("Device_data").Scan(&data).Error
-	if err != nil {
-		return err
-	}
-	// Create new Data Record
-	err = userRepo.db.Table("Data_record").Create(
-		&entity.DataRecord{
-			Device_id:    deviceID,
-			Time:         time.Now(),
-			Device_data:  data,
-			Device_state: state,
-		}).Error
-	if err != nil {
-		return err
-	}
+
 	return nil
 }
