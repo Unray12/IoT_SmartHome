@@ -10,6 +10,7 @@ import AccountPlusOutline from 'mdi-material-ui/AccountPlusOutline'
 import AlertCircleOutline from 'mdi-material-ui/AlertCircleOutline'
 import GoogleCirclesExtended from 'mdi-material-ui/GoogleCirclesExtended'
 import CogOutline from 'mdi-material-ui/CogOutline'
+import { title } from 'process'
 
 const navigation = () => {
   return [
@@ -33,6 +34,12 @@ const navigation = () => {
       icon: AccountCogOutline,
       path: '/account-settings'
     },
+    {
+      title: 'Activity Log',
+      icon: AlertCircleOutline,
+      path: '/activity-log'
+    }
+
   ]
 }
 
