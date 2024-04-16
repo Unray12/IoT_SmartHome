@@ -1,13 +1,10 @@
 import * as React from 'react';
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
-import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
-import Button from '@mui/material/Button';
-import Typography from '@mui/material/Typography';
 import BasicSwitches from './switch';
 import Grid from '@mui/material/Grid';
-import SpeedDialIcon from '@mui/material/SpeedDialIcon';
+
 import FormGroup from '@mui/material/FormGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import { styled } from '@mui/material/styles';
@@ -63,47 +60,12 @@ const bull = (
 );
 
 export default function BasicCard(props) {
-  const handleFanLevel = async (event) => {
-    setFanLevel(event.target.value);
-    try {
-      const response = await axios.post(BElink + "/users/updateFanSpeed", 
-      {
-        fan_speed:parseInt(event.target.value, 10), 
-        headers: {
-        "Content-Type": "application/json"
-      }})
-      console.log(response);
-    } catch (error) {
-      console.log(error);
-    }
-  }
-  // const handleFanLevel = async (event) => {
-  //   setFanLevel(event.target.value);
-  //   if (handleFanLevel.timeoutId) {
-  //     clearTimeout(handleFanLevel.timeoutId);
-  //   }
-  //   handleFanLevel.timeoutId = setTimeout(async () => {
-  //     try {
-  //       const response = await axios.post(BElink + "/users/updateFanSpeed", {
-  //         fan_speed: parseInt(event.target.value, 10),
-  //       }, {
-  //         headers: {
-  //           "Content-Type": "application/json"
-  //         }
-  //       });
-  //       console.log(response);
-  //     } catch (error) {
-  //       console.log(error);
-  //     }
-  //   }, 1000); // 1000 milliseconds = 1 second
-  // };
-  
-
-  const [fanLevel, setFanLevel] = React.useState(0);
-    const { text } = props
+  const { text } = props
 
   return (
-    <Card sx={{ width: "50%", minWidth: 400, minHeight: 150 }}>
+    <Card 
+    sx={{ width: "50%", minWidth: 400, minHeight: 150}}>
+
       <CardContent>
         <Grid container justifyContent="space-between" alignItems="center">
             <Grid item>
@@ -118,31 +80,11 @@ export default function BasicCard(props) {
             <Grid item sx={{ fontSize: 14, width: 'fit-content'}} color="text.secondary" gutterBottom>
                 Active 3 hours ago
             </Grid>
-        {{text} == "FAN" }
-        {text == "FAN" &&
-    <FormGroup>
-      <FormControlLabel
-        control={<PrettoSlider
-          valueLabelDisplay="auto"
-          value={fanLevel}
-          onChange={handleFanLevel}
-          aria-label="pretto slider"
-          defaultValue={20} 
-          sx={{
-            width: '100%', // Adjust the width as per your requirement
-          }}
-        />}
-        labelPlacement='top'
-        label="FAN SLIDER"
-      />
-      </FormGroup>}
-         </Grid>
+        {/* {{text} == "FAN" } */}
+        </Grid>
 
 
       </CardContent>
-      {/* <CardActions>
-        <Button size="small">Learn More</Button>
-      </CardActions> */}
     </Card>
   );
 }

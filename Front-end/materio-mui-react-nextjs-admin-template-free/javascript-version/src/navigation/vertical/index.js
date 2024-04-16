@@ -24,6 +24,11 @@ const navigation = () => {
       path: '/controller'
     },
     {
+      title: 'Dashboard',
+      icon: HomeOutline,
+      path: '/Dashboard'
+    },
+    {
       title: 'Account Settings',
       icon: AccountCogOutline,
       path: '/account-settings'
