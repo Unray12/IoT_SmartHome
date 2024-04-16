@@ -12,9 +12,7 @@ import BasicCard from './card'
 import PresetMenu from './presetMenu'
 import { useState, useEffect } from "react";
 import axios from 'axios'
-import BasicSwitches from './switch'
-import controllerCard from './card'
-import BasicCard from './card'
+
 
 
 
@@ -24,7 +22,8 @@ import BasicCard from './card'
  * ! If you need all the icons from the library, use "import * as Icon from 'mdi-material-ui'"
  * */
 
- const devices = ["LIGHT", "FAN", "AIR-CONDITIONER", "SMART TV"]const BElink = "https://hgs-backend.onrender.com"
+ const devices = ["LIGHT", "FAN", "AIR-CONDITIONER", "SMART TV"];
+ const BElink = "https://hgs-backend.onrender.com"
 
 const Controller = () => {
 const devices = ["LIGHT", "FAN", "AIR-CONDITIONER", "SMART TV"]
