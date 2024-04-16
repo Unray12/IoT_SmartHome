@@ -29,6 +29,7 @@ import Twitter from 'mdi-material-ui/Twitter'
 import Facebook from 'mdi-material-ui/Facebook'
 import EyeOutline from 'mdi-material-ui/EyeOutline'
 import EyeOffOutline from 'mdi-material-ui/EyeOffOutline'
+import axios from "axios"
 
 // ** Configs
 import themeConfig from 'src/configs/themeConfig'
@@ -56,6 +57,8 @@ const FormControlLabel = styled(MuiFormControlLabel)(({ theme }) => ({
     color: theme.palette.text.secondary
   }
 }))
+// I have done worse
+const BElink = "https://hgs-backend.onrender.com"
 
 const LoginPage = () => {
   // ** State
@@ -67,6 +70,20 @@ const LoginPage = () => {
   // ** Hook
   const theme = useTheme()
   const router = useRouter()
+
+  const handelLogin = async () => {
+    var a = await axios.post(BElink + "/public/login", {
+        "username": "user1",
+        "password": "pass1"
+    }).then((response) => {
+      let token = response.data.token
+    //   localStorage.setItem("token",token);
+      localStorage.setItem("SavedToken", 'Bearer ' + token);
+      axios.defaults.headers.common['Authorization'] = 'Bearer ' + token;
+      router.push('/')
+    })
+    console.log(a)
+  }
 
   const handleChange = prop => event => {
     setValues({ ...values, [prop]: event.target.value })
@@ -201,7 +218,7 @@ const LoginPage = () => {
               size='large'
               variant='contained'
               sx={{ marginBottom: 7 }}
-              onClick={() => router.push('/')}
+              onClick={handelLogin}
             >
               Login
             </Button>

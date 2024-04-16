@@ -10,7 +10,8 @@ import BasicSwitches from './switch'
 import controllerCard from './card'
 import BasicCard from './card'
 import PresetMenu from './presetMenu'
-
+import { useState, useEffect } from "react";
+import axios from 'axios'
 
 /**
  ** Icons Imports:
@@ -18,10 +19,21 @@ import PresetMenu from './presetMenu'
  * ! If you need all the icons from the library, use "import * as Icon from 'mdi-material-ui'"
  * */
 
-
+ const BElink = "https://hgs-backend.onrender.com"
 
 const Controller = () => {
   const devices = ["LIGHT", "FAN", "AIR-CONDITIONER", "SMART TV"]
+
+const getAllHouseSetting = async () => {
+    console.log(localStorage.getItem("SavedToken"))
+
+    var a = await axios.get(BElink + '/users/getHouseSetting?house_id=1', { headers: { Authorization:localStorage.getItem('SavedToken') }})
+    console.log(a)
+}
+
+useEffect(() => {
+    getAllHouseSetting()
+},[])
 
   return (
     <Grid container spacing={3}>
@@ -39,10 +51,10 @@ const Controller = () => {
         <PresetMenu/>
       </Grid>
       {devices.map(device => (
-        <Grid 
-          item key={device} 
-          spacing={2} 
-          padding={1} 
+        <Grid
+          item key={device}
+          spacing={2}
+          padding={1}
         >
           <BasicCard text={device} />
         </Grid>
