@@ -29,14 +29,18 @@ const BackendLink = 'https://hgs-backend.onrender.com'
 const Dashboard = () => {
   const [temperature, setTemperature] = useState(null); // State for temperature
   const [humidity, setHumidity] = useState(null);     // State for humidity
+  const [fan_speed, setFanSpeed] = useState(null);    // State for fan speed
+  const [light, setLight] = useState(null);           // State for light level
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get(`${BackendLink}/users/getTempAndHumid`, {headers: {Authorization: localStorage.getItem('SavedToken')}});
+        const response = await axios.get(`${BackendLink}/users/getDashboardData`, {headers: {Authorization: localStorage.getItem('SavedToken')}});
         const data = response.data;
         setTemperature(data.temperature);
         setHumidity(data.humidity);
+        setFanSpeed(data.fan_speed);
+        setLight(data.light);
       } catch (error) {
         console.error('Error fetching data:', error);
         // Handle errors gracefully, e.g., display an error message to the user
@@ -70,7 +74,7 @@ const Dashboard = () => {
             </Grid>
             <Grid item xs={6}>
               <CardStatisticsVerticalComponent
-                stats='1000 RPM'
+                stats={fan_speed ? `${fan_speed} RPM` : 'Loading...'} // Display 'Loading...' or actual fan speed
                 title='Fan Speed'
                 color='secondary'
                 icon={<WindPowerIcon />}
@@ -85,7 +89,7 @@ const Dashboard = () => {
             </Grid>
             <Grid item xs={6}>
               <CardStatisticsVerticalComponent
-                stats='200 Lux'
+                stats={light ? `${light} lux` : 'Loading...'} // Display 'Loading...' or actual light level
                 color='warning'
                 title='Light Level'
                 icon={<WbSunnyIcon />}
