@@ -33,7 +33,7 @@ const Dashboard = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get(`${BackendLink}/users/getTempAndHumid`);
+        const response = await axios.get(`${BackendLink}/users/getTempAndHumid`, {headers: {Authorization: localStorage.getItem('SavedToken')}});
         const data = response.data;
         setTemperature(data.temperature);
         setHumidity(data.humidity);

@@ -11,6 +11,9 @@ import TableCell from '@mui/material/TableCell'
 import TableContainer from '@mui/material/TableContainer'
 import TablePagination from '@mui/material/TablePagination'
 
+import axios from 'axios'
+
+
 const columns = [
   { id: 'activity_id', label: 'Activity ID', minWidth: 170 },
   { id: 'house_id', label: 'House ID', minWidth: 100 },
@@ -42,7 +45,15 @@ const ActLogTable = () => {
   const [rows, setRows] = useState([])
 
   useEffect(() => {
-    fetch('https://hgs-backend.onrender.com/users/getActivityLog?house_id=1')
+    fetch(
+      'https://hgs-backend.onrender.com/users/getActivityLog?house_id=1',
+      { method: 'GET', headers: {
+         'Content-Type': 'application/json',
+         Authorization: localStorage.getItem('SavedToken')
+        }
+      }
+
+    )
       .then(response => response.json())
       .then(data => setRows(data)) // Update rows state with fetched data
       .catch(error => console.error('Error:', error))
