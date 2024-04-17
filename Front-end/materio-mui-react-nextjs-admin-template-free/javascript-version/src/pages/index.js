@@ -74,7 +74,7 @@ const Dashboard = () => {
             </Grid>
             <Grid item xs={6}>
               <CardStatisticsVerticalComponent
-                stats={fan_speed ? `${fan_speed} RPM` : 'Loading...'} // Display 'Loading...' or actual fan speed
+                stats={fan_speed ? `${fan_speed}%` : 'Loading...'} // Display 'Loading...' or actual fan speed
                 title='Fan Speed'
                 color='secondary'
                 icon={<WindPowerIcon />}
