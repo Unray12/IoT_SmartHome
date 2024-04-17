@@ -12,7 +12,7 @@ const BElink = "https://hgs-backend.onrender.com";
 export default function PresetMenu() {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [listPreset, setListPreset] = React.useState([]);
-  const [selectedPreset, setSelectedPreset] = React.useState({});
+  const [selectedPreset, setSelectedPreset] = React.useState("");
   const [openDialog, setOpenDialog] = React.useState(false);
   const open = Boolean(anchorEl);
 
@@ -42,6 +42,7 @@ export default function PresetMenu() {
           "Content-Type": "application/json",
           Authorization:localStorage.getItem('SavedToken')
         }});
+
         console.log(response);
       } else if (preset[i].device_id == 18) {
         const response = preset[i].device_status == "true" ? await axios.post(BElink + "/users/turnOnLight", { headers: { Authorization:localStorage.getItem('SavedToken') }}) 
@@ -50,13 +51,14 @@ export default function PresetMenu() {
       }
     }
   }
-  const handleCloseMenu = (value) => {
+  const handleCloseMenu = () => {
     setAnchorEl(null);
+    setSelectedPreset("");
   }
-  const handleClose = async () => {
-    
+  const handleClose = async (presetName) => {
+    setSelectedPreset(presetName)
     handleClickOpenDialog();
-    let response = await axios.get(BElink + `/users/getHouseSetting?house_id=1&${selectedPreset.name}}`, { headers: { Authorization:localStorage.getItem('SavedToken') }});
+    let response = await axios.get(BElink + `/users/getSetOfHouseSetting?house_id=1&name=${presetName}`, { headers: { Authorization:localStorage.getItem('SavedToken') }});
     applyPreset(response.data);
     console.log(response)
   };
@@ -91,7 +93,7 @@ export default function PresetMenu() {
       >
         {listPreset.map(preset => (
 
-            <MenuItem onClick={handleClose} key = {preset.name}> {preset.name} </MenuItem>
+            <MenuItem onClick={(presetName) => handleClose(preset.name)} key = {preset.name}> {preset.name} </MenuItem>
             
           ))}
         <Button onClick={addMorePreset}>Add more</Button>
