@@ -107,7 +107,7 @@ const PrettoSlider = styled(Slider)({
 
 const BElink = "https://hgs-backend.onrender.com"
 export default function BasicSwitches(props) {
-  const { text } = props
+  const { text } = props;
   const [fanChecked, setFanChecked] = React.useState(false);
   const [fanLevel, setFanLevel] = React.useState(0);
   const [lightChecked, setLightChecked] = React.useState(false);

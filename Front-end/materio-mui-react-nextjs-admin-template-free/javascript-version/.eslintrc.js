@@ -50,9 +50,9 @@ module.exports = {
 
     // add new line after each var, const, let declaration
     'padding-line-between-statements': [
-      'error',
-      { blankLine: 'always', prev: ['export'], next: ['*'] },
-      { blankLine: 'always', prev: ['*'], next: ['multiline-const', 'multiline-let', 'multiline-var', 'export'] }
+    //   'error',
+    //   { blankLine: 'always', prev: ['export'], next: ['*'] },
+    //   { blankLine: 'always', prev: ['*'], next: ['multiline-const', 'multiline-let', 'multiline-var', 'export'] }
     ]
   }
 }
