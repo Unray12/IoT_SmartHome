@@ -47,12 +47,12 @@ const Dashboard = () => {
       }
     };
 
-    const intervalId = setInterval(fetchData, 5000); // Fetch data every 5 seconds
+    const intervalId = setInterval(fetchData, 8000); // Fetch data every 5 seconds
 
     // Cleanup function to clear the interval when the component unmounts
     return () => clearInterval(intervalId);
   }, []); // Empty dependency array ensures data is fetched only once on componen
-  
+
   return (
     <ApexChartWrapper>
       <Grid container spacing={6}>
