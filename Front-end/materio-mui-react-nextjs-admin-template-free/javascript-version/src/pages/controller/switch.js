@@ -1,10 +1,12 @@
 import * as React from 'react';
+import { useContext } from 'react';
 import { styled } from '@mui/material/styles';
 import FormGroup from '@mui/material/FormGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Switch from '@mui/material/Switch';
 import axios from 'axios';
 import Slider from '@mui/material/Slider';
+import { deviceContext } from './deviceProvider';
 
 
 
@@ -108,10 +110,14 @@ const PrettoSlider = styled(Slider)({
 const BElink = "https://hgs-backend.onrender.com"
 export default function BasicSwitches(props) {
   const { text } = props
-  const [fanChecked, setFanChecked] = React.useState(false);
-  const [fanLevel, setFanLevel] = React.useState(0);
-  const [lightChecked, setLightChecked] = React.useState(false);
+  // const [fanChecked, setFanChecked] = React.useState(false);
+  // const [fanLevel, setFanLevel] = React.useState(0);
+
   
+  // const [lightChecked, setLightChecked] = React.useState(false);
+
+  const { lightChecked, setLightChecked, fanChecked, setFanChecked } = useContext(deviceContext);
+
   const handleChangeFan = async (event) => {
     setFanChecked(event.target.checked);
     try {
@@ -123,25 +129,7 @@ export default function BasicSwitches(props) {
     }
     
   }
-  const handleChangeFanLevel = (event, newValue) => {
-    setFanLevel(newValue);
-  };
 
-  const handleFanLevel = async (event, newValue) => {
-    setFanLevel(newValue);
-    try {
-      const response = await axios.post(BElink + "/users/updateFanSpeed", 
-      {
-        fan_speed:parseInt(newValue, 10), 
-        headers: {
-        "Content-Type": "application/json",
-        Authorization:localStorage.getItem('SavedToken')
-      }})
-      console.log(response);
-    } catch (error) {
-      console.log(error);
-    }
-  }
 
   const handleChangeLight = async (event) => {
     setLightChecked(event.target.checked);
@@ -178,27 +166,6 @@ export default function BasicSwitches(props) {
             labelPlacement='top'
             label=""
         />
-
-      {/* </FormGroup> */}
-    {text == "FAN" &&
-    // <FormGroup>
-      <FormControlLabel
-        control={<PrettoSlider
-          valueLabelDisplay="auto"
-          value={fanLevel}
-          onChange={handleChangeFanLevel}
-          onChangeCommitted={handleFanLevel}
-          aria-label="pretto slider"
-          defaultValue={20} 
-          sx={{
-            width: '100%', // Adjust the width as per your requirement
-          }}
-        />}
-        labelPlacement='top'
-        label="FAN SLIDER"
-      />
-      // </FormGroup>
-      }
     </FormGroup>
 
 

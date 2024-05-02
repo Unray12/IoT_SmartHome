@@ -4,12 +4,9 @@ import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import BasicSwitches from './switch';
 import Grid from '@mui/material/Grid';
-
-import FormGroup from '@mui/material/FormGroup';
-import FormControlLabel from '@mui/material/FormControlLabel';
 import { styled } from '@mui/material/styles';
 import Slider from '@mui/material/Slider';
-
+import axios from 'axios';
 
 const PrettoSlider = styled(Slider)({
   color: '#52af77',
@@ -59,29 +56,65 @@ const bull = (
   </Box>
 );
 
+const BElink = "https://hgs-backend.onrender.com";
+
 export default function BasicCard(props) {
   const { text } = props
+  const [fanLevel, setFanLevel] = React.useState(0);
+
+  
+  const handleFanLevel = async (event, newValue) => {
+    setFanLevel(newValue);
+    try {
+      const response = await axios.post(BElink + "/users/updateFanSpeed", 
+      {
+        fan_speed:parseInt(newValue, 10), 
+        headers: {
+        "Content-Type": "application/json",
+        Authorization:localStorage.getItem('SavedToken')
+      }})
+      console.log(response);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  const handleChangeFanLevel = (event, newValue) => {
+    setFanLevel(newValue);
+  };
 
   return (
     <Card 
     sx={{ width: "50%", minWidth: 400, minHeight: 150}}>
 
       <CardContent>
-        <Grid container justifyContent="space-between" alignItems="center">
+        <Grid container justifyContent="space-between">
             <Grid item>
             {text}
             </Grid>
-        
             <Grid item justifyContent="flex-end" alignItems="top right">
                 <BasicSwitches text={text}/>
             </Grid>
-         </Grid>
-         <Grid container justifyContent="space-between" alignItems="center">
+          </Grid>
+
+          {text == "FAN" && 
+          <Grid container justifyContent="space-between">
+            <PrettoSlider 
+              defaultValue={50} 
+              aria-label="pretto slidert"
+              valueLabelDisplay="auto"
+              value={fanLevel}
+              onChange={handleChangeFanLevel}
+              onChangeCommitted={handleFanLevel}
+              />
+          </Grid>
+          }
+         
+         {/* <Grid container justifyContent="space-between" alignItems="center">
             <Grid item sx={{ fontSize: 14, width: 'fit-content'}} color="text.secondary" gutterBottom>
                 Active 3 hours ago
             </Grid>
-        {/* {{text} == "FAN" } */}
-        </Grid>
+        </Grid> */}
 
 
       </CardContent>

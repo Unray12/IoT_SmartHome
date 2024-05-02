@@ -1,17 +1,15 @@
 // ** MUI Imports
 import Grid from '@mui/material/Grid'
-import Card from '@mui/material/Card'
+
 import Link from '@mui/material/Link'
-import Button from '@mui/material/Button'
-import Tooltip from '@mui/material/Tooltip'
+
 import Typography from '@mui/material/Typography'
-import CardContent from '@mui/material/CardContent'
-import BasicSwitches from './switch'
-import controllerCard from './card'
+
 import BasicCard from './card'
 import PresetMenu from './presetMenu'
-import { useState, useEffect } from "react";
+import { useEffect } from 'react'
 import axios from 'axios'
+import { DeviceProvider } from './deviceProvider'
 
 /**
  ** Icons Imports:
@@ -36,6 +34,7 @@ useEffect(() => {
 },[])
 
   return (
+    <DeviceProvider>
     <Grid container spacing={3}>
       <Grid item xs={12}>
         <Typography variant='h4' style={{ display: 'inline-block', verticalAlign: 'middle', lineHeight: '28px' }}>
@@ -45,9 +44,10 @@ useEffect(() => {
             </svg>
             &nbsp;Device Controller
           </Link>
-          <PresetMenu/>
+          <DeviceProvider>
+            <PresetMenu/>
+          </DeviceProvider>
         </Typography>
-        
       </Grid>
       {devices.map(device => (
         <Grid
@@ -57,9 +57,11 @@ useEffect(() => {
         >
           <BasicCard text={device} />
         </Grid>
+      
       ))}
 
     </Grid>
+    </DeviceProvider>
   )
 }
 
