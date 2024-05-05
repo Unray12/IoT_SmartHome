@@ -62,13 +62,13 @@ export default function BasicCard(props) {
   const { text } = props
   const [fanLevel, setFanLevel] = React.useState(0);
 
-  
+
   const handleFanLevel = async (event, newValue) => {
     setFanLevel(newValue);
     try {
-      const response = await axios.post(BElink + "/users/updateFanSpeed", 
+      const response = await axios.post(BElink + "/users/updateFanSpeed",
       {
-        fan_speed:parseInt(newValue, 10), 
+        fan_speed:parseInt(newValue, 10),
         headers: {
         "Content-Type": "application/json",
         Authorization:localStorage.getItem('SavedToken')
@@ -84,11 +84,11 @@ export default function BasicCard(props) {
   };
 
   return (
-    <Card 
+    <Card
     sx={{ width: "50%", minWidth: 400, minHeight: 150}}>
 
       <CardContent>
-        <Grid container justifyContent="space-between">
+        <Grid container justifyContent="space-between" >
             <Grid item>
             {text}
             </Grid>
@@ -97,10 +97,10 @@ export default function BasicCard(props) {
             </Grid>
           </Grid>
 
-          {text == "FAN" && 
-          <Grid container justifyContent="space-between">
-            <PrettoSlider 
-              defaultValue={50} 
+          {text == "FAN" &&
+          <Grid container justifyContent="space-between"  sx={{mt: 8}}>
+            <PrettoSlider
+              defaultValue={50}
               aria-label="pretto slidert"
               valueLabelDisplay="auto"
               value={fanLevel}
@@ -109,7 +109,7 @@ export default function BasicCard(props) {
               />
           </Grid>
           }
-         
+
          {/* <Grid container justifyContent="space-between" alignItems="center">
             <Grid item sx={{ fontSize: 14, width: 'fit-content'}} color="text.secondary" gutterBottom>
                 Active 3 hours ago
