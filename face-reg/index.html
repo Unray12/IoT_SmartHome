@@ -7,26 +7,29 @@
 
 <body>
     <div class="contentarea">
-        <h1>
-            Using Javascript to capture Photo
+        <h1 id="Title">
+            face recognition system
         </h1>
         <div class="camera">
             <video id="video">Video stream not available.</video>
         </div>
-        <div><button id="startbutton">Unlock the door
+        <div><button id="startbutton">Take picture
         </button></div>
         <canvas id="canvas"></canvas>
         <div class="output">
             <img id="photo">
         </div>
-        <div><a id="verify" download="photo.png">verify User</a></div>
-        <div><a id="Upload_photo" upload="photo.png">Upload photo</a></div>
+        <div class="buttons">
+            <button id="verify">Verify User</button>
+            <button id="Upload_photo">Upload Photo</button>
+        </div>
+        <div id="output"></div>
     </div>
 
     <script>
         /* JS comes here */
         (function () {
-            var width = 320; // We will scale the photo width to this
+            var width = 640; // We will scale the photo width to this
             var height = 0; // This will be computed based on the input stream
             var streaming = false;
             var video = null;
@@ -114,27 +117,13 @@
                 var formData = new FormData();
                 formData.append('img', blob); // append the image data to formData
                 var encoding
-                var encoding = await fetch('https://face-reg-service-latest.onrender.com/img2encoding', {
-                    method: 'POST',
-                    body: formData // send formData
-                })
-                .then(function (response) {
-                    if (!response.ok) {
-                        throw new Error('HTTP error ' + response.status);
-                    }
-                    console.log(response);
-                    return response.text(); // or response.text() if the response is text
-                })
-                .catch(function (error) {
-                    console.error('Error:', error);
-                });
-                face_encoding = encoding['face_encoding']
-                formData.append('encoding_array', [face_encoding]);
-                formData.append('encoding_array', ["1"]);
-                formData.append('encoding_array', ["2"]);
+                const headers = {
+                    'Access-Control-Allow-Origin':'*',
+                    'Access-Control-Allow-Methods':'POST,PATCH,OPTIONS'}
                 
-                fetch('https://face-reg-service-latest.onrender.com/verify', {
+                fetch('https://hgs-backend.onrender.com/devices/verifyFace', {
                     method: 'POST',
+                    headers: headers,
                     body: formData ,// send formData,
                 })
                 .then(function (response) {
@@ -146,9 +135,13 @@
                 })
                 .then(function (data) {
                     console.log(data);
+                    document.getElementById('output').innerHTML = 'Verification successful!';
+                    document.getElementById('output').style.color = "#56ca00";
                 })
                 .catch(function (error) {
                     console.error('Error:', error);
+                    document.getElementById('output').innerHTML = 'Verification failed!';
+                    document.getElementById('output').style.color = "#FF4C51";
                 });
             }
             function sendImageToUploadAPI() {
@@ -159,7 +152,7 @@
                 formData.append('img', blob); // append the image data to formData
                 
             
-                fetch('https://face-reg-service-latest.onrender.com/img2encoding', {
+                fetch('https://hgs-backend.onrender.com/devices/setFace', {
                     method: 'POST',
                     body: formData // send formData
                 })
@@ -172,9 +165,14 @@
                 })
                 .then(function (data) {
                     console.log(data);
+                    document.getElementById('output').innerHTML = 'Upload successful!';
+                    document.getElementById('output').style.color = "#56ca00";
+                    
                 })
                 .catch(function (error) {
                     console.error('Error:', error);
+                    document.getElementById('output').innerHTML = 'Upload failed!';
+                    document.getElementById('output').style.color = "#FF4C51";
                 });
             }
             // function to convert dataURL to blob
@@ -194,3 +192,5 @@
     </script>
 </body>
 </html>
+
+
