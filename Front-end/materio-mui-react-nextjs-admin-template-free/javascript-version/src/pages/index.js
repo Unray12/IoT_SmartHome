@@ -1,57 +1,87 @@
-// ** MUI Imports
-import Grid from '@mui/material/Grid'
+import React, { useState, useEffect } from 'react';
 
-// ** Icons Imports
-import Poll from 'mdi-material-ui/Poll'
-import CurrencyUsd from 'mdi-material-ui/CurrencyUsd'
-import HelpCircleOutline from 'mdi-material-ui/HelpCircleOutline'
-import BriefcaseVariantOutline from 'mdi-material-ui/BriefcaseVariantOutline'
+// ** MUI Imports
+import Grid from '@mui/material/Grid';
+import Paper from '@mui/material/Paper';
+import Snackbar from '@mui/material/Snackbar';
+import Alert from '@mui/material/Alert'; // Alert component for styled snackbar
 import DeviceThermostatIcon from '@mui/icons-material/DeviceThermostat';
 import WindPowerIcon from '@mui/icons-material/WindPower';
-import AirIcon from '@mui/icons-material/Air';
+import WaterDropOutlined from '@mui/icons-material/WaterDropOutlined';
 import WbSunnyIcon from '@mui/icons-material/WbSunny';
-import { useState, useEffect } from 'react'
+import ApexChartWrapper from 'src/@core/styles/libs/react-apexcharts';
+
 // ** Custom Components Imports
-import CardStatisticsVerticalComponent from 'src/@core/components/card-statistics/card-stats-vertical'
+import CardStatisticsVerticalComponent from 'src/@core/components/card-statistics/card-stats-vertical';
+import Table from 'src/views/dashboard/Table';
+import TotalEarning from 'src/views/dashboard/TotalEarning';
+import WeeklyOverview from 'src/views/dashboard/WeeklyOverview';
 
-// ** Styled Component Import
-import ApexChartWrapper from 'src/@core/styles/libs/react-apexcharts'
-import { WaterDropOutlined } from '@mui/icons-material'
+// ** Axios Import
+import axios from 'axios';
 
-// ** Demo Components Imports
-import Table from 'src/views/dashboard/Table'
-import TotalEarning from 'src/views/dashboard/TotalEarning'
-import WeeklyOverview from 'src/views/dashboard/WeeklyOverview'
-
-import axios from 'axios'
-const BackendLink = 'https://hgs-backend.onrender.com'
+const BackendLink = 'https://hgs-backend.onrender.com';
 
 const Dashboard = () => {
-  const [temperature, setTemperature] = useState(null); // State for temperature
-  const [humidity, setHumidity] = useState(null);     // State for humidity
-  const [fan_speed, setFanSpeed] = useState(null);    // State for fan speed
-  const [light, setLight] = useState(null);           // State for light level
+  // ** States
+  const [temperature, setTemperature] = useState(null);
+  const [humidity, setHumidity] = useState(null);
+  const [fan_speed, setFanSpeed] = useState(null);
+  const [light, setLight] = useState(null);
+  const [openHighTempSnackbar, setOpenHighTempSnackbar] = useState(false); // >60 degrees
+  const [openWarningTempSnackbar, setOpenWarningTempSnackbar] = useState(false); // >40 degrees but <=60 degrees
+
+  const highTempThreshold = 60; // Threshold for high temperature in degrees Celsius
+  const warningTempThreshold = 35; // Threshold for warning temperature in degrees Celsius
+
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get(`${BackendLink}/users/getDashboardData`, {headers: {Authorization: localStorage.getItem('SavedToken')}});
+        const response = await axios.get(`${BackendLink}/users/getDashboardData`, {
+          headers: {
+            Authorization: localStorage.getItem('SavedToken'),
+          },
+        });
+
+        // Mock setting temperature to 90 for testing
+        const mockTemperature = 45; // To test the Snackbar
+
         const data = response.data;
         setTemperature(data.temperature);
         setHumidity(data.humidity);
         setFanSpeed(data.fan_speed);
         setLight(data.light);
+
+        // Trigger the toast if temperature exceeds the threshold
+        if (data.temperature > highTempThreshold) {
+          setOpenHighTempSnackbar(true);
+        } else if (data.temperature > warningTempThreshold) {
+          setOpenWarningTempSnackbar(true);
+        }
+  
       } catch (error) {
         console.error('Error fetching data:', error);
-        // Handle errors gracefully, e.g., display an error message to the user
+        // Handle errors gracefully
       }
     };
 
-    const intervalId = setInterval(fetchData, 8000); // Fetch data every 5 seconds
+    fetchData(); // Fetch data immediately for testing
 
-    // Cleanup function to clear the interval when the component unmounts
-    return () => clearInterval(intervalId);
-  }, []); // Empty dependency array ensures data is fetched only once on componen
+    const intervalId = setInterval(fetchData, 8000); // Fetch data every 8 seconds
+
+    return () => clearInterval(intervalId); // Cleanup on component unmount
+  }, []); // Empty dependency array ensures data is fetched only once on component mount
+
+  // Handler to close the snackbar
+  const handleCloseSnackbar = (snackbarType) => {
+    if (snackbarType === 'high') {
+      setOpenHighTempSnackbar(false);
+    } else if (snackbarType === 'warning') {
+      setOpenWarningTempSnackbar(false);
+    }
+  };
+
 
   return (
     <ApexChartWrapper>
@@ -66,7 +96,7 @@ const Dashboard = () => {
           <Grid container spacing={6}>
             <Grid item xs={6}>
               <CardStatisticsVerticalComponent
-                stats={temperature ? `${temperature}°C` : 'Loading...'} // Display 'Loading...' or actual temperature
+                stats={temperature ? `${temperature}°C` : 'Loading...'}
                 icon={<DeviceThermostatIcon />}
                 color='success'
                 title='Current Temp'
@@ -74,7 +104,7 @@ const Dashboard = () => {
             </Grid>
             <Grid item xs={6}>
               <CardStatisticsVerticalComponent
-                stats={fan_speed ? `${fan_speed}%` : 'Loading...'} // Display 'Loading...' or actual fan speed
+                stats={fan_speed ? `${fan_speed}%` : 'Loading...'}
                 title='Fan Speed'
                 color='secondary'
                 icon={<WindPowerIcon />}
@@ -82,14 +112,14 @@ const Dashboard = () => {
             </Grid>
             <Grid item xs={6}>
               <CardStatisticsVerticalComponent
-                  stats={humidity ? `${humidity}%` : 'Loading...'} // Display 'Loading...' or actual humidity
+                stats={humidity ? `${humidity}%` : 'Loading...'}
                 title='Humidity'
                 icon={<WaterDropOutlined />}
               />
             </Grid>
             <Grid item xs={6}>
               <CardStatisticsVerticalComponent
-                stats={light ? `${light} lux` : 'Loading...'} // Display 'Loading...' or actual light level
+                stats={light ? `${light} lux` : 'Loading...'}
                 color='warning'
                 title='Light Level'
                 icon={<WbSunnyIcon />}
@@ -101,8 +131,52 @@ const Dashboard = () => {
           <Table />
         </Grid>
       </Grid>
-    </ApexChartWrapper>
-  )
-}
 
-export default Dashboard
+      {/* Snackbar to alert users if temperature is too high */}
+      {/* Snackbar for high temperature (>60°C) */}
+      <Snackbar
+        open={openHighTempSnackbar}
+        autoHideDuration={10000}
+        onClose={() => handleCloseSnackbar('high')}
+        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+      >
+        <Alert
+          onClose={() => handleCloseSnackbar('high')}
+          severity="error"
+          sx={{
+            width: '100%',
+            backgroundColor: '#f44336',
+            color: '#ffffff',
+            '.MuiAlert-icon': { color: '#ffffff' },
+          }}
+        >
+          Temperature is too high! Current temperature is {temperature}°C.
+        </Alert>
+      </Snackbar>
+
+      {/* Snackbar for warning temperature (>40°C but <=60°C) */}
+      <Snackbar
+        open={openWarningTempSnackbar}
+        autoHideDuration={8000}
+        onClose={() => handleCloseSnackbar('warning')}
+        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+      >
+        <Alert
+          onClose={() => handleCloseSnackbar('warning')}
+          severity="warning"
+          sx={{
+            width: '100%',
+            backgroundColor: '#ff9800', // Opaque orange color for warning severity
+            color: '#ffffff', // White color for text
+            '.MuiAlert-icon': { color: '#ffffff' }, // White color for icon
+          }}
+        >
+          Temperature is getting high! Current temperature is {temperature}°C.
+        </Alert>
+      </Snackbar>
+
+    </ApexChartWrapper>
+  );
+};
+
+export default Dashboard;
