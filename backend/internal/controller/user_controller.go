@@ -120,7 +120,7 @@ func (h UserController) turnOnLight(ctx *gin.Context) {
 
 func (h UserController) turnOffLight(ctx *gin.Context) {
 
-	err := h.userService.TurnOffLight(1)
+	err := h.userService.UpdateLightLevel(1, 0)
 	if err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{"error": err})
 		return
