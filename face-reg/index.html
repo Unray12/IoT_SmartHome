@@ -135,7 +135,7 @@
                 })
                 .then(function (data) {
                     console.log(data);
-                    document.getElementById('output').innerHTML = 'Verification successful!';
+                    document.getElementById('output').innerHTML = 'Opened the door!';
                     document.getElementById('output').style.color = "#56ca00";
                 })
                 .catch(function (error) {
@@ -171,7 +171,7 @@
                 })
                 .catch(function (error) {
                     console.error('Error:', error);
-                    document.getElementById('output').innerHTML = 'Upload failed!';
+                    document.getElementById('output').innerHTML = 'Failed to upload image to server';
                     document.getElementById('output').style.color = "#FF4C51";
                 });
             }
