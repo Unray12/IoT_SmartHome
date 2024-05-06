@@ -6,15 +6,11 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import Switch from '@mui/material/Switch';
 import axios from 'axios';
 import Slider from '@mui/material/Slider';
-import { deviceContext } from './deviceProvider';
-
+import { deviceContext } from './DeviceProvider';
 
 
 
 const label = { inputProps: { 'aria-label': 'Switch demo' } };
-
-
-
 
 const IOSSwitch = styled((props) => (
   <Switch focusVisibleClassName=".Mui-focusVisible" disableRipple {...props} />
@@ -110,13 +106,8 @@ const PrettoSlider = styled(Slider)({
 const BElink = "https://hgs-backend.onrender.com"
 export default function BasicSwitches(props) {
   const { text } = props
-  // const [fanChecked, setFanChecked] = React.useState(false);
-  // const [fanLevel, setFanLevel] = React.useState(0);
 
-  
-  // const [lightChecked, setLightChecked] = React.useState(false);
-
-  const { lightChecked, setLightChecked, fanChecked, setFanChecked } = useContext(deviceContext);
+  const { lightChecked, setLightChecked, fanChecked, setFanChecked, fanLevel, setFanLevel, doorOpen, setDoorOpen, lightLevel, setLightLevel } = useContext(deviceContext);
 
   const handleChangeFan = async (event) => {
     setFanChecked(event.target.checked);
@@ -144,11 +135,27 @@ export default function BasicSwitches(props) {
     
   }
 
+
+  const handleChangeDoor = async (event) => {
+    setDoorOpen(event.target.checked);
+
+    try {
+      const response = event.target.checked ? await axios.post(BElink + "/users/openDoor", { headers: { Authorization:localStorage.getItem('SavedToken') }}) 
+      : await axios.post(BElink + "/users/closeDoor",{ headers: { Authorization:localStorage.getItem('SavedToken') }});
+      console.log(response);
+    } catch (error) {
+      console.log(error);
+    }
+    
+  }
+
   const handleOnChange = (event) => {
     if (text == "LIGHT")
       handleChangeLight(event);
     else if (text == "FAN")
       handleChangeFan(event);
+    else if (text == "MAIN DOOR")
+    handleChangeDoor(event);
   }
   
   return (
@@ -161,7 +168,7 @@ export default function BasicSwitches(props) {
               transform: 'scale(1)',
             }} 
             defaultChecked
-            checked={text == "LIGHT" ? lightChecked : fanChecked} 
+            checked={(text == "LIGHT" && lightChecked) ||  (text == "FAN" && fanChecked) || (text == "MAIN DOOR" && doorOpen)} 
             onChange={handleOnChange}/>}
             labelPlacement='top'
             label=""

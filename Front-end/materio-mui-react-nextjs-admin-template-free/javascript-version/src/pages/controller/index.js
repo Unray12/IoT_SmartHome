@@ -9,7 +9,7 @@ import BasicCard from './card'
 import PresetMenu from './presetMenu'
 import { useEffect } from 'react'
 import axios from 'axios'
-import { DeviceProvider } from './deviceProvider'
+import { DeviceProvider } from './DeviceProvider'
 
 /**
  ** Icons Imports:
@@ -20,7 +20,7 @@ import { DeviceProvider } from './deviceProvider'
 const BElink = "https://hgs-backend.onrender.com"
 
 const Controller = () => {
-const devices = ["LIGHT", "FAN", "AIR-CONDITIONER", "SMART TV"]
+const devices = ["LIGHT", "FAN", "AIR-CONDITIONER", "MAIN DOOR"]
 
 const getAllHouseSetting = async () => {
     console.log(localStorage.getItem("SavedToken"))
