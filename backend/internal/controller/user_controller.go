@@ -120,7 +120,7 @@ func (h UserController) turnOnLight(ctx *gin.Context) {
 
 func (h UserController) turnOffLight(ctx *gin.Context) {
 
-	err := h.userService.UpdateLightLevel(1, 0)
+	err := h.userService.TurnOffLight(1)
 	if err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{"error": err})
 		return
@@ -212,7 +212,6 @@ func (h UserController) turnOffFan(ctx *gin.Context) {
 		ctx.JSON(http.StatusBadRequest, gin.H{"error": err})
 		return
 	}
-
 	_ = h.userService.CreateActivityLog(&entity.ActivityLog{
 		House_id:      1,
 		Device:        "Fan",
