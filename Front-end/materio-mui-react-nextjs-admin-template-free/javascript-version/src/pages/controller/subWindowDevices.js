@@ -12,6 +12,81 @@ import Slider from '@mui/material/Slider';
 
 const emails = ['username@gmail.com', 'user02@gmail.com'];
 
+const setData = [
+  {
+      "device_id": 2,
+      "device_name": "Door1",
+      "house_id": 1,
+      "name": "Setting1",
+      "device_data": 2,
+      "device_state": false
+  },
+  {
+      "device_id": 8,
+      "device_name": "Fan1",
+      "house_id": 1,
+      "name": "Setting1",
+      "device_data": 49,
+      "device_state": true
+  },
+  {
+      "device_id": 9,
+      "device_name": "Fan2",
+      "house_id": 1,
+      "name": "Setting1",
+      "device_data": 0,
+      "device_state": true
+  },
+  {
+      "device_id": 13,
+      "device_name": "Temperature1",
+      "house_id": 1,
+      "name": "Setting1",
+      "device_data": 600,
+      "device_state": false
+  },
+  {
+      "device_id": 16,
+      "device_name": "Light1",
+      "house_id": 1,
+      "name": "Setting1",
+      "device_data": 650,
+      "device_state": false
+  },
+  {
+      "device_id": 17,
+      "device_name": "Light2",
+      "house_id": 1,
+      "name": "Setting1",
+      "device_data": 700,
+      "device_state": false
+  },
+  {
+      "device_id": 18,
+      "device_name": "Light3",
+      "house_id": 1,
+      "name": "Setting1",
+      "device_data": 700,
+      "device_state": false
+  },
+  {
+      "device_id": 32,
+      "device_name": "Alarm17",
+      "house_id": 1,
+      "name": "Setting1",
+      "device_data": 700,
+      "device_state": false
+  },
+  {
+      "device_id": 33,
+      "device_name": "Humidity",
+      "house_id": 1,
+      "name": "Setting1",
+      "device_data": 30,
+      "device_state": false
+  }
+]
+
 export default function SimpleDialog(props) {
   const { onClose, selectedValue, open } = props;
 
@@ -23,6 +98,21 @@ export default function SimpleDialog(props) {
     onClose(value);
   };
 
+
+  const applyPreset = async (preset) => {
+    const response = await axios.post(BElink + "/users/updateSets", 
+      {
+        // preset[1].device_data = 1;
+        headers: {
+        "Content-Type": "application/json",
+        Authorization:localStorage.getItem('SavedToken')
+      }});
+  }
+
+  const savePreset = () => {
+
+  }
+
   return (
     <Dialog onClose={handleClose} open={open} >
       <DialogTitle>Presetting devices</DialogTitle>
@@ -31,10 +121,14 @@ export default function SimpleDialog(props) {
             <FormControlLabel control={<Switch defaultChecked />} label="FAN"  />
             <Slider defaultValue={50} aria-label="Default" valueLabelDisplay="auto" />
             <FormControlLabel control={<Switch defaultChecked />} label="LIGHT" />
-            <FormControlLabel control={<Switch defaultChecked />} label="AIR-CONDITIONER"/>
+            <Slider defaultValue={50} aria-label="Default" valueLabelDisplay="auto" />
+            <FormControlLabel control={<Switch defaultChecked />} label="MAIN DOOR"/>
         </FormGroup>
         <Stack sx={{ margin: '20px' }}>
-            <Button variant="contained">Save</Button>
+            <Button 
+              variant="contained"
+              onClick={savePreset}
+            >Save</Button>
         </Stack>
     </DialogContent>
     </Dialog>
