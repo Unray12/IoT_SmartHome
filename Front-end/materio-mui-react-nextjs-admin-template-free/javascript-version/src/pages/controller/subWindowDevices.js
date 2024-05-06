@@ -109,9 +109,6 @@ export default function SimpleDialog(props) {
 
   const applyPreset = async () => {
     console.log(fanLevel);
-    setFanChecked(fanPresetChecked);
-    setFanLevel(90);
-    console.log(fanLevel);
     const response = await axios.post(BElink + "/users/updateSets", 
 
         [{device_id: 8,

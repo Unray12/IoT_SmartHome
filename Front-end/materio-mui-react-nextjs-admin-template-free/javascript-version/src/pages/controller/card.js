@@ -183,6 +183,11 @@ export default function BasicCard(props) {
               // value={fanLevelText} 
               type="number"
               onChange={onchangeFanLevelText}
+              inputProps={{
+                min: 30,
+                max: 100,
+                step: 1 // Optional step value
+              }}
               InputLabelProps={{
                 shrink: true,
               }}
@@ -218,6 +223,11 @@ export default function BasicCard(props) {
               // value={fanLevelText} 
               type="number"
               onChange={onchangeLightLevelText}
+              inputProps={{
+                min: 1,
+                max: 4,
+                step: 1 // Optional step value
+              }}
               InputLabelProps={{
                 shrink: true,
               }}
