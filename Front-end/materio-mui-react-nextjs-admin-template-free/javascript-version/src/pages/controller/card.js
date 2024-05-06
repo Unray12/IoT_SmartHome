@@ -4,12 +4,13 @@ import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import BasicSwitches from './switch';
 import Grid from '@mui/material/Grid';
-
-import FormGroup from '@mui/material/FormGroup';
-import FormControlLabel from '@mui/material/FormControlLabel';
 import { styled } from '@mui/material/styles';
 import Slider from '@mui/material/Slider';
-
+import axios from 'axios';
+import { deviceContext } from './DeviceProvider';
+import TextField from '@mui/material/TextField';
+import Button from '@mui/material/Button';
+import { on } from 'events';
 
 const PrettoSlider = styled(Slider)({
   color: '#52af77',
@@ -59,29 +60,183 @@ const bull = (
   </Box>
 );
 
+const BElink = "https://hgs-backend.onrender.com";
+
 export default function BasicCard(props) {
   const { text } = props
+  const [fanLevelText, setFanLevelText] = React.useState(0);
+  const [lightLevelText, lightFanLevelText] = React.useState(4);
+  const { lightChecked, setLightChecked, fanChecked, setFanChecked, fanLevel, setFanLevel, doorOpen, setDoorOpen, lightLevel, setLightLevel } = React.useContext(deviceContext);
+  
+
+  const buttonSaveFanLevelText = async (event) => {
+    setFanLevel(fanLevelText);
+    try {
+      const response = await axios.post(BElink + "/users/updateFanSpeed", 
+      {
+        fan_speed:parseInt(fanLevelText, 10),
+        headers: {
+        "Content-Type": "application/json",
+        Authorization:localStorage.getItem('SavedToken')
+      }})
+      console.log(response);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  const buttonSaveLightLevelText = async (event) => {
+    setLightLevel(lightLevelText);
+    try {
+      const response = await axios.post(BElink + "/users/updateLightLevel", 
+      {
+        light_level:parseInt(lightLevelText, 10),
+        headers: {
+        "Content-Type": "application/json",
+        Authorization:localStorage.getItem('SavedToken')
+      }})
+      console.log(response);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  const onchangeFanLevelText = (event) => {
+    fanLevelText = event.target.value;
+  }
+
+  const onchangeLightLevelText = (event) => {
+    lightLevelText = event.target.value;
+  }
+
+  const handleFanLevel = async (event, newValue) => {
+    setFanLevel(newValue);
+    try {
+      const response = await axios.post(BElink + "/users/updateFanSpeed",
+      {
+        fan_speed:parseInt(newValue, 10),
+        headers: {
+        "Content-Type": "application/json",
+        Authorization:localStorage.getItem('SavedToken')
+      }})
+      console.log(response);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  const handleLightLevel = async (event, newValue) => {
+    setLightLevel(newValue);
+    try {
+      const response = await axios.post(BElink + "/users/updateLightLevel", 
+      {
+        light_level:parseInt(newValue, 10), 
+        headers: {
+        "Content-Type": "application/json",
+        Authorization:localStorage.getItem('SavedToken')
+      }})
+      console.log(response);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+
+
+  const handleChangeFanLevel = (event, newValue) => {
+    setFanLevel(newValue);
+  };
+
+  const handleChangeLightLevel = (event, newValue) => {
+    setLightLevel(newValue);
+  };
 
   return (
-    <Card 
+    <Card
     sx={{ width: "50%", minWidth: 400, minHeight: 150}}>
 
       <CardContent>
-        <Grid container justifyContent="space-between" alignItems="center">
+        <Grid container justifyContent="space-between" >
             <Grid item>
             {text}
             </Grid>
-        
             <Grid item justifyContent="flex-end" alignItems="top right">
                 <BasicSwitches text={text}/>
             </Grid>
-         </Grid>
-         <Grid container justifyContent="space-between" alignItems="center">
+          </Grid>
+
+          {text == "FAN" && 
+          <Grid container justifyContent="space-between">
+            <PrettoSlider 
+              defaultValue={50}
+              min={30}
+              max={100}
+              aria-label="pretto slidert"
+              valueLabelDisplay="auto"
+              value={fanLevel}
+              onChange={handleChangeFanLevel}
+              onChangeCommitted={handleFanLevel}
+              />
+            
+            <TextField
+              id="outlined-number"
+              label="Level"
+              // value={fanLevelText} 
+              type="number"
+              onChange={onchangeFanLevelText}
+              InputLabelProps={{
+                shrink: true,
+              }}
+              variant="filled"
+          />
+          <Button 
+            variant="text"
+            onClick={buttonSaveFanLevelText}
+          > SAVE
+          </Button>
+          </Grid>
+        }
+
+          {text == "LIGHT" && 
+          <Grid container justifyContent="space-between">
+            <Slider
+              aria-label="Temperature"
+              defaultValue={3}
+              value={lightLevel}
+              // getAriaValueText={valuetext}
+              valueLabelDisplay="auto"
+              step={1}
+              marks
+              min={1}
+              max={4}
+              onChange={handleChangeFanLevel}
+              onChangeCommitted={handleLightLevel}
+            />
+            
+            <TextField
+              id="outlined-number"
+              label="Level"
+              // value={fanLevelText} 
+              type="number"
+              onChange={onchangeLightLevelText}
+              InputLabelProps={{
+                shrink: true,
+              }}
+              variant="filled"
+          />
+          <Button 
+            variant="text"
+            onClick={buttonSaveLightLevelText}
+          > SAVE
+          </Button>
+          </Grid>
+        }
+         
+         {/* <Grid container justifyContent="space-between" alignItems="center">
             <Grid item sx={{ fontSize: 14, width: 'fit-content'}} color="text.secondary" gutterBottom>
                 Active 3 hours ago
             </Grid>
-        {/* {{text} == "FAN" } */}
-        </Grid>
+        </Grid> */}
 
 
       </CardContent>

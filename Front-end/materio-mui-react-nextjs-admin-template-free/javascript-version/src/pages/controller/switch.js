@@ -1,18 +1,16 @@
 import * as React from 'react';
+import { useContext } from 'react';
 import { styled } from '@mui/material/styles';
 import FormGroup from '@mui/material/FormGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Switch from '@mui/material/Switch';
 import axios from 'axios';
 import Slider from '@mui/material/Slider';
-
+import { deviceContext } from './DeviceProvider';
 
 
 
 const label = { inputProps: { 'aria-label': 'Switch demo' } };
-
-
-
 
 const IOSSwitch = styled((props) => (
   <Switch focusVisibleClassName=".Mui-focusVisible" disableRipple {...props} />
@@ -107,48 +105,43 @@ const PrettoSlider = styled(Slider)({
 
 const BElink = "https://hgs-backend.onrender.com"
 export default function BasicSwitches(props) {
-  const { text } = props;
-  const [fanChecked, setFanChecked] = React.useState(false);
-  const [fanLevel, setFanLevel] = React.useState(0);
-  const [lightChecked, setLightChecked] = React.useState(false);
-  
+  const { text } = props
+
+  const { lightChecked, setLightChecked, fanChecked, setFanChecked, fanLevel, setFanLevel, doorOpen, setDoorOpen, lightLevel, setLightLevel } = useContext(deviceContext);
+
   const handleChangeFan = async (event) => {
     setFanChecked(event.target.checked);
     try {
-      const response = event.target.checked ? await axios.post(BElink + "/users/turnOnFan", { headers: { Authorization:localStorage.getItem('SavedToken') }}) 
+      const response = event.target.checked ? await axios.post(BElink + "/users/turnOnFan", { headers: { Authorization:localStorage.getItem('SavedToken') }})
       : await axios.post(BElink + "/users/turnOffFan", { headers: { Authorization:localStorage.getItem('SavedToken') }});
       console.log(response);
     } catch (error) {
       console.log(error);
     }
-    
-  }
-  const handleChangeFanLevel = (event, newValue) => {
-    setFanLevel(newValue);
-  };
 
-  const handleFanLevel = async (event, newValue) => {
-    setFanLevel(newValue);
-    try {
-      const response = await axios.post(BElink + "/users/updateFanSpeed", 
-      {
-        fan_speed:parseInt(newValue, 10), 
-        headers: {
-        "Content-Type": "application/json",
-        Authorization:localStorage.getItem('SavedToken')
-      }})
-      console.log(response);
-    } catch (error) {
-      console.log(error);
-    }
   }
+
 
   const handleChangeLight = async (event) => {
     setLightChecked(event.target.checked);
 
     try {
-      const response = event.target.checked ? await axios.post(BElink + "/users/turnOnLight", { headers: { Authorization:localStorage.getItem('SavedToken') }}) 
+      const response = event.target.checked ? await axios.post(BElink + "/users/turnOnLight", { headers: { Authorization:localStorage.getItem('SavedToken') }})
       : await axios.post(BElink + "/users/turnOffLight",{ headers: { Authorization:localStorage.getItem('SavedToken') }});
+      console.log(response);
+    } catch (error) {
+      console.log(error);
+    }
+
+  }
+
+
+  const handleChangeDoor = async (event) => {
+    setDoorOpen(event.target.checked);
+
+    try {
+      const response = event.target.checked ? await axios.post(BElink + "/users/openDoor", { headers: { Authorization:localStorage.getItem('SavedToken') }}) 
+      : await axios.post(BElink + "/users/closeDoor",{ headers: { Authorization:localStorage.getItem('SavedToken') }});
       console.log(response);
     } catch (error) {
       console.log(error);
@@ -161,44 +154,25 @@ export default function BasicSwitches(props) {
       handleChangeLight(event);
     else if (text == "FAN")
       handleChangeFan(event);
+    else if (text == "MAIN DOOR")
+    handleChangeDoor(event);
   }
-  
+
   return (
     <div>
       <FormGroup>
         <FormControlLabel
-          control={<IOSSwitch 
-            sx={{ 
+          control={<IOSSwitch
+            sx={{
               m: 1,
               transform: 'scale(1)',
-            }} 
+            }}
             defaultChecked
-            checked={text == "LIGHT" ? lightChecked : fanChecked} 
+            checked={(text == "LIGHT" && lightChecked) ||  (text == "FAN" && fanChecked) || (text == "MAIN DOOR" && doorOpen)} 
             onChange={handleOnChange}/>}
             labelPlacement='top'
             label=""
         />
-
-      {/* </FormGroup> */}
-    {text == "FAN" &&
-    // <FormGroup>
-      <FormControlLabel
-        control={<PrettoSlider
-          valueLabelDisplay="auto"
-          value={fanLevel}
-          onChange={handleChangeFanLevel}
-          onChangeCommitted={handleFanLevel}
-          aria-label="pretto slider"
-          defaultValue={20} 
-          sx={{
-            width: '100%', // Adjust the width as per your requirement
-          }}
-        />}
-        labelPlacement='top'
-        label="FAN SLIDER"
-      />
-      // </FormGroup>
-      }
     </FormGroup>
 
 
