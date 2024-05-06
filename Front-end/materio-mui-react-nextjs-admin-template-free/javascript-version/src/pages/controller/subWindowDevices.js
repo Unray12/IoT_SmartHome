@@ -8,7 +8,9 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import FormGroup from '@mui/material/FormGroup';
 import Stack from '@mui/material/Stack';
 import { DialogContent } from '@mui/material';
+import { deviceContext } from './DeviceProvider';
 import Slider from '@mui/material/Slider';
+import axios from 'axios';
 
 const emails = ['username@gmail.com', 'user02@gmail.com'];
 
@@ -86,9 +88,12 @@ const setData = [
       "device_state": false
   }
 ]
-
+const BElink = "https://hgs-backend.onrender.com";
 export default function SimpleDialog(props) {
   const { onClose, selectedValue, open } = props;
+  const { lightChecked, setLightChecked, fanChecked, setFanChecked, fanLevel, setFanLevel, doorOpen, setDoorOpen, lightLevel, setLightLevel } = React.useContext(deviceContext);
+  const [lightPresetChecked, setLightPresetChecked] = React.useState(false);
+  const [fanPresetChecked, setFanPresetChecked] = React.useState(false);
 
   const handleClose = () => {
     onClose(selectedValue);
@@ -98,15 +103,28 @@ export default function SimpleDialog(props) {
     onClose(value);
   };
 
+  const onChageFanChecked = (event) => {
+    setFanPresetChecked(event.target.checked);
+  }
 
-  const applyPreset = async (preset) => {
+  const applyPreset = async () => {
+    console.log(fanLevel);
+    setFanChecked(fanPresetChecked);
+    setFanLevel(90);
+    console.log(fanLevel);
     const response = await axios.post(BElink + "/users/updateSets", 
-      {
-        // preset[1].device_data = 1;
-        headers: {
+
+        [{device_id: 8,
+        device_name: "Fan1",
+        house_id: 1,
+        name: "Setting1",
+        device_data: 49,
+        device_state: fanPresetChecked}],
+
+        {
         "Content-Type": "application/json",
         Authorization:localStorage.getItem('SavedToken')
-      }});
+      });
   }
 
   const savePreset = () => {
@@ -118,7 +136,12 @@ export default function SimpleDialog(props) {
       <DialogTitle>Presetting devices</DialogTitle>
       <DialogContent sx={{ padding: '20px' }} >
         <FormGroup>
-            <FormControlLabel control={<Switch defaultChecked />} label="FAN"  />
+            <FormControlLabel control={
+            <Switch 
+              defaultChecked
+              onClick={onChageFanChecked}
+            ></Switch>
+            } label="FAN"  />
             <Slider defaultValue={50} aria-label="Default" valueLabelDisplay="auto" />
             <FormControlLabel control={<Switch defaultChecked />} label="LIGHT" />
             <Slider defaultValue={50} aria-label="Default" valueLabelDisplay="auto" />
@@ -127,7 +150,7 @@ export default function SimpleDialog(props) {
         <Stack sx={{ margin: '20px' }}>
             <Button 
               variant="contained"
-              onClick={savePreset}
+              onClick={applyPreset}
             >Save</Button>
         </Stack>
     </DialogContent>

@@ -10,7 +10,6 @@ import axios from 'axios';
 import { deviceContext } from './DeviceProvider';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
-import { on } from 'events';
 
 const PrettoSlider = styled(Slider)({
   color: '#52af77',
