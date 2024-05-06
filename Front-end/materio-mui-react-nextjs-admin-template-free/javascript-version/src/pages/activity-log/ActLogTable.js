@@ -43,9 +43,9 @@ const ActLogTable = () => {
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [rows, setRows] = useState([]);
 
-  const [sortConfig, setSortConfig] = useState({ key: null, direction: 'asc' });
+  // Default sort: activity_id descending
+  const [sortConfig, setSortConfig] = useState({ key: 'activity_id', direction: 'desc' });
 
-  // Fetch data
   useEffect(() => {
     axios
       .get('https://hgs-backend.onrender.com/users/getActivityLog?house_id=1', {
@@ -54,9 +54,9 @@ const ActLogTable = () => {
           Authorization: localStorage.getItem('SavedToken'),
         },
       })
-      .then((response) => setRows(response.data)) // Update rows state with fetched data
+      .then((response) => setRows(response.data))
       .catch((error) => console.error('Error:', error));
-  }, []); // Empty dependency array means this effect runs once on mount
+  }, []); // Effect runs once on mount
 
   // Function to handle sorting
   const handleSort = (columnId) => {
@@ -65,17 +65,19 @@ const ActLogTable = () => {
     setSortConfig({ key: columnId, direction: newDirection });
   };
 
-  // Apply sorting to rows
+  // Apply sorting to rows based on the current sort configuration
   const sortedRows = [...rows].sort((a, b) => {
-    if (sortConfig.key === null) return 0; // No sorting
+    const { key, direction } = sortConfig;
 
-    const valueA = a[sortConfig.key];
-    const valueB = b[sortConfig.key];
+    const valueA = a[key];
+    const valueB = b[key];
 
     const compareResult =
-      typeof valueA === 'number' ? valueA - valueB : String(valueA).localeCompare(String(valueB));
+      typeof valueA === 'number'
+        ? valueA - valueB
+        : String(valueA).localeCompare(String(valueB));
 
-    return sortConfig.direction === 'asc' ? compareResult : -compareResult;
+    return direction === 'asc' ? compareResult : -compareResult; // Reverse if descending
   });
 
   const handleChangePage = (event, newPage) => {
@@ -122,13 +124,13 @@ const ActLogTable = () => {
                     tabIndex={-1}
                     key={row.activity_id}
                     sx={{
-                      borderBottom: isLastRow ? 'none' : '2px solid #d0d0d0', // distinct border
+                      borderBottom: isLastRow ? 'none' : '2px solid #d0d0d0', // Distinct border
                     }}
                   >
                     {columns.map((column) => {
                       let value = row[column.id];
                       if (column.id === 'time') {
-                        value = format(new Date(value), 'dd-MM-yyyy HH:mm'); // formatted date
+                        value = format(new Date(value), 'dd-MM-yyyy HH:mm'); // Formatted date
                       }
                       return (
                         <TableCell key={column.id} align={column.align}>
