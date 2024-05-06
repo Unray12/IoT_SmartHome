@@ -75,7 +75,7 @@ const DashboardTable = () => {
   return (
     <Card>
       <TableContainer>
-        <Table sx={{ minWidth: 800 }} aria-label='table in dashboard'>
+        <Table sx={{ minWidth: 800 }} aria-label='table with dividing lines'>
           <TableHead>
             <TableRow>
               <TableCell>Location</TableCell>
@@ -85,11 +85,19 @@ const DashboardTable = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {rows.map(row => (
-              <TableRow hover key={row.location} sx={{ '&:last-of-type td, &:last-of-type th': { border: 0 } }}>
+            {rows.map((row, index) => (
+              <TableRow
+                hover
+                key={row.location}
+                sx={{
+                  '&:not(:last-of-type)': {
+                    borderBottom: '1px solid #ddd', // Line between rows
+                  },
+                }}
+              >
                 <TableCell sx={{ py: theme => `${theme.spacing(0.5)} !important` }}>
                   <Box sx={{ display: 'flex', flexDirection: 'column' }}>
-                    <Typography sx={{ fontWeight: 500, fontSize: '0.875rem !important' }}>{row.location}</Typography> 
+                    <Typography sx={{ fontWeight: 500, fontSize: '0.875rem !important' }}>{row.location}</Typography>
                   </Box>
                 </TableCell>
                 <TableCell>{row.date}</TableCell>
@@ -102,7 +110,7 @@ const DashboardTable = () => {
                       height: 24,
                       fontSize: '0.75rem',
                       textTransform: 'capitalize',
-                      '& .MuiChip-label': { fontWeight: 500 }
+                      '& .MuiChip-label': { fontWeight: 500 },
                     }}
                   />
                 </TableCell>
