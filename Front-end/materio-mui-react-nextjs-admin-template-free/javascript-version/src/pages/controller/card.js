@@ -112,9 +112,9 @@ export default function BasicCard(props) {
   const handleFanLevel = async (event, newValue) => {
     setFanLevel(newValue);
     try {
-      const response = await axios.post(BElink + "/users/updateFanSpeed", 
+      const response = await axios.post(BElink + "/users/updateFanSpeed",
       {
-        fan_speed:parseInt(newValue, 10), 
+        fan_speed:parseInt(newValue, 10),
         headers: {
         "Content-Type": "application/json",
         Authorization:localStorage.getItem('SavedToken')
@@ -152,11 +152,11 @@ export default function BasicCard(props) {
   };
 
   return (
-    <Card 
+    <Card
     sx={{ width: "50%", minWidth: 400, minHeight: 150}}>
 
       <CardContent>
-        <Grid container justifyContent="space-between">
+        <Grid container justifyContent="space-between" >
             <Grid item>
             {text}
             </Grid>
