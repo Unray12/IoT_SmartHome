@@ -31,7 +31,7 @@ const Dashboard = () => {
   const [openHighTempSnackbar, setOpenHighTempSnackbar] = useState(false); // >60 degrees
   const [openWarningTempSnackbar, setOpenWarningTempSnackbar] = useState(false); // >40 degrees but <=60 degrees
 
-  const highTempThreshold = 60; // Threshold for high temperature in degrees Celsius
+  const highTempThreshold = 45; // Threshold for high temperature in degrees Celsius
   const warningTempThreshold = 35; // Threshold for warning temperature in degrees Celsius
 
 
@@ -43,18 +43,16 @@ const Dashboard = () => {
             Authorization: localStorage.getItem('SavedToken'),
           },
         });
-
-        // Mock setting temperature to 90 for testing
-        const mockTemperature = 45; // To test the Snackbar
+        
 
         const data = response.data;
         setTemperature(data.temperature);
         setHumidity(data.humidity);
         setFanSpeed(data.fan_speed);
-        setLight(data.light);
-
+        
+        setLight(data.light_level);
         // Trigger the toast if temperature exceeds the threshold
-        if (data.temperature > highTempThreshold) {
+        if (data.temperature > highTempThreshold && data.humidity < 15) {
           setOpenHighTempSnackbar(true);
         } else if (data.temperature > warningTempThreshold) {
           setOpenWarningTempSnackbar(true);
@@ -104,7 +102,7 @@ const Dashboard = () => {
             </Grid>
             <Grid item xs={6}>
               <CardStatisticsVerticalComponent
-                stats={fan_speed ? `${fan_speed}%` : 'Loading...'}
+                stats={fan_speed === 0 ? '0%' : (fan_speed ? `${fan_speed}%` : 'Loading...')}
                 title='Fan Speed'
                 color='secondary'
                 icon={<WindPowerIcon />}
@@ -119,7 +117,7 @@ const Dashboard = () => {
             </Grid>
             <Grid item xs={6}>
               <CardStatisticsVerticalComponent
-                stats={light ? `${light} lux` : 'Loading...'}
+                stats={light === 0 ? '0' : ( light ? `${light}` : 'Loading...')}
                 color='warning'
                 title='Light Level'
                 icon={<WbSunnyIcon />}
