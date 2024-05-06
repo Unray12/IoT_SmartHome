@@ -30,11 +30,11 @@ const navigation = () => {
       icon: mdiHistory,
       path: '/activity-log'
     },
-    {
-      title: 'Account Settings',
-      icon: AccountCogOutline,
-      path: '/account-settings'
-    },
+    // {
+    //   title: 'Account Settings',
+    //   icon: AccountCogOutline,
+    //   path: '/account-settings'
+    // },
 
   ]
 }
