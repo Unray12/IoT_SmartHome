@@ -113,8 +113,8 @@ export default function BasicSwitches(props) {
     setFanChecked(event.target.checked);
     event.target.checked ? setFanLevel(50) : setFanLevel(30);
     try {
-      const response = event.target.checked ? await axios.post(BElink + "/users/turnOnFan", { headers: { Authorization:localStorage.getItem('SavedToken') }})
-      : await axios.post(BElink + "/users/turnOffFan", { headers: { Authorization:localStorage.getItem('SavedToken') }});
+      const response = event.target.checked ? await axios.post(BElink + "/users/turnOnFan", null, { headers: { Authorization:localStorage.getItem('SavedToken') }})
+      : await axios.post(BElink + "/users/turnOffFan", null, { headers: { Authorization:localStorage.getItem('SavedToken') }});
       console.log(response);
     } catch (error) {
       console.log(error);
@@ -128,8 +128,8 @@ export default function BasicSwitches(props) {
     setLightLevel(1);
 
     try {
-      const response = event.target.checked ? await axios.post(BElink + "/users/turnOnLight", { headers: { Authorization:localStorage.getItem('SavedToken') }})
-      : await axios.post(BElink + "/users/turnOffLight",{ headers: { Authorization:localStorage.getItem('SavedToken') }});
+      const response = event.target.checked ? await axios.post(BElink + "/users/turnOnLight", null, { headers: { Authorization:localStorage.getItem('SavedToken') }})
+      : await axios.post(BElink + "/users/turnOffLight", null, { headers: { Authorization:localStorage.getItem('SavedToken') }});
       console.log(response);
     } catch (error) {
       console.log(error);
@@ -142,8 +142,8 @@ export default function BasicSwitches(props) {
     setDoorOpen(event.target.checked);
 
     try {
-      const response = event.target.checked ? await axios.post(BElink + "/users/openDoor", { headers: { Authorization:localStorage.getItem('SavedToken') }}) 
-      : await axios.post(BElink + "/users/closeDoor",{ headers: { Authorization:localStorage.getItem('SavedToken') }});
+      const response = event.target.checked ? await axios.post(BElink + "/users/openDoor", null, { headers: { Authorization:localStorage.getItem('SavedToken') }}) 
+      : await axios.post(BElink + "/users/closeDoor", null, { headers: { Authorization:localStorage.getItem('SavedToken') }});
       console.log(response);
     } catch (error) {
       console.log(error);

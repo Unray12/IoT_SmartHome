@@ -28,7 +28,6 @@ export const DeviceProvider = ({ children }) => {
             setFanLevel(data.fan_speed);
             setLightLevel(data.light_level);
             setDoorOpen(data.door);
-            console.log("It runs");
           } catch (error) {
             console.error('Error fetching data:', error);
             // Handle errors gracefully

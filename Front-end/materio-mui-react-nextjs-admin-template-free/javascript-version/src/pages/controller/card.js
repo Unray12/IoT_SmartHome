@@ -74,6 +74,7 @@ export default function BasicCard(props) {
       const response = await axios.post(BElink + "/users/updateFanSpeed", 
       {
         fan_speed:parseInt(fanLevelText, 10),
+      },{
         headers: {
         "Content-Type": "application/json",
         Authorization:localStorage.getItem('SavedToken')
@@ -90,6 +91,7 @@ export default function BasicCard(props) {
       const response = await axios.post(BElink + "/users/updateLightLevel", 
       {
         light_level:parseInt(lightLevelText, 10),
+      },{
         headers: {
         "Content-Type": "application/json",
         Authorization:localStorage.getItem('SavedToken')
@@ -113,7 +115,7 @@ export default function BasicCard(props) {
     try {
       const response = await axios.post(BElink + "/users/updateFanSpeed",
       {
-        fan_speed:parseInt(newValue, 10),
+        fan_speed:parseInt(newValue, 10)}, {
         headers: {
         "Content-Type": "application/json",
         Authorization:localStorage.getItem('SavedToken')
@@ -129,7 +131,7 @@ export default function BasicCard(props) {
     try {
       const response = await axios.post(BElink + "/users/updateLightLevel", 
       {
-        light_level:parseInt(newValue, 10), 
+        light_level:parseInt(newValue, 10)}, {
         headers: {
         "Content-Type": "application/json",
         Authorization:localStorage.getItem('SavedToken')
@@ -152,7 +154,7 @@ export default function BasicCard(props) {
 
   return (
     <Card
-    sx={{ width: "50%", minWidth: 400, minHeight: 150}}>
+    sx={{ width: "50%", minWidth: 400, minHeight: 180}}>
 
       <CardContent>
         <Grid container justifyContent="space-between" >
