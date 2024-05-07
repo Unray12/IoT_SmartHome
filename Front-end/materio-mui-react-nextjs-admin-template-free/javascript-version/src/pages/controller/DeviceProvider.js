@@ -8,8 +8,8 @@ export const DeviceProvider = ({ children }) => {
     const [lightChecked, setLightChecked] = useState(false);
     const [fanChecked, setFanChecked] = React.useState(false);
     const [doorOpen, setDoorOpen] = React.useState(false);
-    const [fanLevel, setFanLevel] = React.useState(0);
-    const [lightLevel, setLightLevel] = React.useState(4);
+    const [fanLevel, setFanLevel] = React.useState(50);
+    const [lightLevel, setLightLevel] = React.useState(1);
 
     useEffect(() => {
         const BackendLink = 'https://hgs-backend.onrender.com';

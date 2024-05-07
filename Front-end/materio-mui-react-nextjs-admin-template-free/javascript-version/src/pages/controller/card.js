@@ -10,7 +10,6 @@ import axios from 'axios';
 import { deviceContext } from './DeviceProvider';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
-import { on } from 'events';
 
 const PrettoSlider = styled(Slider)({
   color: '#52af77',
@@ -167,7 +166,8 @@ export default function BasicCard(props) {
 
           {text == "FAN" && 
           <Grid container justifyContent="space-between">
-            <PrettoSlider 
+            <PrettoSlider
+            disabled={!fanChecked} 
               defaultValue={50}
               min={30}
               max={100}
@@ -184,6 +184,11 @@ export default function BasicCard(props) {
               // value={fanLevelText} 
               type="number"
               onChange={onchangeFanLevelText}
+              inputProps={{
+                min: 30,
+                max: 100,
+                step: 1 // Optional step value
+              }}
               InputLabelProps={{
                 shrink: true,
               }}
@@ -191,7 +196,7 @@ export default function BasicCard(props) {
           />
           <Button 
             variant="text"
-            onClick={buttonSaveFanLevelText}
+            onClick={(event) => {fanChecked && buttonSaveFanLevelText(event)}}
           > SAVE
           </Button>
           </Grid>
@@ -200,6 +205,7 @@ export default function BasicCard(props) {
           {text == "LIGHT" && 
           <Grid container justifyContent="space-between">
             <Slider
+              disabled={!lightChecked}
               aria-label="Temperature"
               defaultValue={3}
               value={lightLevel}
@@ -209,7 +215,7 @@ export default function BasicCard(props) {
               marks
               min={1}
               max={4}
-              onChange={handleChangeFanLevel}
+              onChange={handleChangeLightLevel}
               onChangeCommitted={handleLightLevel}
             />
             
@@ -219,6 +225,11 @@ export default function BasicCard(props) {
               // value={fanLevelText} 
               type="number"
               onChange={onchangeLightLevelText}
+              inputProps={{
+                min: 1,
+                max: 4,
+                step: 1 // Optional step value
+              }}
               InputLabelProps={{
                 shrink: true,
               }}
@@ -226,7 +237,7 @@ export default function BasicCard(props) {
           />
           <Button 
             variant="text"
-            onClick={buttonSaveLightLevelText}
+            onClick={(event) =>lightChecked && buttonSaveLightLevelText(event)}
           > SAVE
           </Button>
           </Grid>

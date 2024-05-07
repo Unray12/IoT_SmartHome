@@ -8,7 +8,6 @@ import SimpleDialog from './subWindowDevices';
 const BElink = "https://hgs-backend.onrender.com";
 
 
-
 export default function PresetMenu() {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [listPreset, setListPreset] = React.useState([]);
@@ -59,7 +58,7 @@ export default function PresetMenu() {
     setSelectedPreset(presetName)
     handleClickOpenDialog();
     let response = await axios.get(BElink + `/users/getSetOfHouseSetting?house_id=1&name=${presetName}`, { headers: { Authorization:localStorage.getItem('SavedToken') }});
-    applyPreset(response.data);
+    // applyPreset(response.data);
     console.log(response)
   };
 
@@ -93,7 +92,7 @@ export default function PresetMenu() {
       >
         {listPreset.map(preset => (
 
-            <MenuItem onClick={(presetName) => handleClose(preset.name)} key = {preset.name}> {preset.name} </MenuItem>
+            <MenuItem onClick={(preset) => handleClose(preset)} key = {preset.name}> {preset.name} </MenuItem>
             
           ))}
         <Button onClick={addMorePreset}>Add more</Button>
