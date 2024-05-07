@@ -111,6 +111,7 @@ export default function BasicSwitches(props) {
 
   const handleChangeFan = async (event) => {
     setFanChecked(event.target.checked);
+    event.target.checked ? setFanLevel(50) : setFanLevel(30);
     try {
       const response = event.target.checked ? await axios.post(BElink + "/users/turnOnFan", { headers: { Authorization:localStorage.getItem('SavedToken') }}) 
       : await axios.post(BElink + "/users/turnOffFan", { headers: { Authorization:localStorage.getItem('SavedToken') }});
@@ -124,6 +125,7 @@ export default function BasicSwitches(props) {
 
   const handleChangeLight = async (event) => {
     setLightChecked(event.target.checked);
+    setLightLevel(1);
 
     try {
       const response = event.target.checked ? await axios.post(BElink + "/users/turnOnLight", { headers: { Authorization:localStorage.getItem('SavedToken') }}) 
